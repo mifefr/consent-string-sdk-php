@@ -37,4 +37,28 @@ class ConsentCookie {
     /** @var  array $vendorsAllowed */
     private $vendorsAllowed;
 
+    /**
+     * Creates a ConsentCookie front a based64 string
+     *
+     * @param  string    $consent_cookie_string
+     *
+     */
+    public function __construct($consent_cookie_string="")
+    {
+        if (!empty($consent_cookie_string)) {
+            $consent_cookie_string_binary = $this->str2bin($consent_cookie_string);
+        }
+    }
+
+    private function str2bin($str) {
+        $out = false;
+        for($a=0; $a < strlen($str); $a++)
+        {
+                $dec = ord(substr($str,$a,1)); //determine symbol ASCII-code
+                $bin = sprintf('%08d', base_convert($dec, 10, 2)); //convert to binary representation and add leading zeros
+                $out .= $bin;
+        }
+        return $out;
+    }
+
 }
