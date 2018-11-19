@@ -1,12 +1,13 @@
 <?php
 
-namespace Mifefr\ConsentStringSDKPHP;
+namespace Mifefr\ConsentString;
 
 /*
  * Holds the info from the consent cookie data
  */
-class ConsentCookie {
 
+class ConsentCookie
+{
     /** @var  string $version */
     private $version;
 
@@ -37,6 +38,24 @@ class ConsentCookie {
     /** @var  array $vendorsAllowed */
     private $vendorsAllowed;
 
+    /** @var  int $maxVendorId */
+    private $maxVendorId;
+
+    /** @var  string $encodingType */
+    private $encodingType;
+
+    /** @var  boolean $bitField */
+    private $bitField;
+
+    /** @var  int $defaultConsent */
+    private $defaultConsent;
+
+    /** @var  int $numEntries */
+    private $numEntries;
+
+    /** @var  array $rangeEntries */
+    private $rangeEntries;
+
     /**
      * Creates a ConsentCookie front a based64 string
      *
@@ -50,4 +69,25 @@ class ConsentCookie {
         }
     }
 
+    public function toArray()
+    {
+        return [
+            "version"           => $this->version,
+            "created"           => $this->created,
+            "lastUpdated"       => $this->lastUpdated,
+            "cmpId"             => $this->cmpId,
+            "cmpVersion"        => $this->cmpVersion,
+            "consentScreen"     => $this->consentScreen,
+            "consentLanguage"   => $this->consentLanguage,
+            "vendorListVersion" => $this->vendorListVersion,
+            "purposesAllowed"   => $this->purposesAllowed,
+            "vendorsAllowed"    => $this->vendorsAllowed,
+            "maxVendorId"       => $this->maxVendorId,
+            "encodingType"      => $this->encodingType,
+            "bitField"          => $this->bitField,
+            "defaultConsent"    => $this-> defaultConsent,
+            "numEntries"        => $this->numEntries,
+            "rangeEntries"      => $this->rangeEntries
+        ];
+    }
 }
