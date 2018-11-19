@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('spl_object_id')) {
+if (!function_exists('str2bin')) {
     function str2bin($str) {
         $out = false;
         for ($a = 0; $a < strlen($str); $a++) {
