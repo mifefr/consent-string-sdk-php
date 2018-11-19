@@ -35,9 +35,6 @@ class ConsentCookie
     /** @var  array $purposesAllowed */
     private $purposesAllowed;
 
-    /** @var  array $vendorsAllowed */
-    private $vendorsAllowed;
-
     /** @var  int $maxVendorId */
     private $maxVendorId;
 
@@ -60,13 +57,282 @@ class ConsentCookie
      * Creates a ConsentCookie front a based64 string
      *
      * @param  string    $consent_cookie_string
-     *
      */
     public function __construct($consent_cookie_string="")
     {
         if (!empty($consent_cookie_string)) {
             $consent_cookie_string_binary = str2bin($consent_cookie_string);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param string $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastUpdated()
+    {
+        return $this->lastUpdated;
+    }
+
+    /**
+     * @param string $lastUpdated
+     */
+    public function setLastUpdated($lastUpdated)
+    {
+        $this->lastUpdated = $lastUpdated;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCmpId()
+    {
+        return $this->cmpId;
+    }
+
+    /**
+     * @param string $cmpId
+     */
+    public function setCmpId($cmpId)
+    {
+        $this->cmpId = $cmpId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCmpVersion()
+    {
+        return $this->cmpVersion;
+    }
+
+    /**
+     * @param string $cmpVersion
+     */
+    public function setCmpVersion($cmpVersion)
+    {
+        $this->cmpVersion = $cmpVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsentScreen()
+    {
+        return $this->consentScreen;
+    }
+
+    /**
+     * @param string $consentScreen
+     */
+    public function setConsentScreen($consentScreen)
+    {
+        $this->consentScreen = $consentScreen;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsentLanguage()
+    {
+        return $this->consentLanguage;
+    }
+
+    /**
+     * @param string $consentLanguage
+     */
+    public function setConsentLanguage($consentLanguage)
+    {
+        $this->consentLanguage = $consentLanguage;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendorListVersion()
+    {
+        return $this->vendorListVersion;
+    }
+
+    /**
+     * @param string $vendorListVersion
+     */
+    public function setVendorListVersion($vendorListVersion)
+    {
+        $this->vendorListVersion = $vendorListVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPurposesAllowed()
+    {
+        return $this->purposesAllowed;
+    }
+
+    /**
+     * @param array $purposesAllowed
+     */
+    public function setPurposesAllowed($purposesAllowed)
+    {
+        $this->purposesAllowed = $purposesAllowed;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxVendorId()
+    {
+        return $this->maxVendorId;
+    }
+
+    /**
+     * @param int $maxVendorId
+     */
+    public function setMaxVendorId($maxVendorId)
+    {
+        $this->maxVendorId = $maxVendorId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncodingType()
+    {
+        return $this->encodingType;
+    }
+
+    /**
+     * @param string $encodingType
+     */
+    public function setEncodingType($encodingType)
+    {
+        $this->encodingType = $encodingType;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBitField()
+    {
+        return $this->bitField;
+    }
+
+    /**
+     * @param bool $bitField
+     */
+    public function setBitField($bitField)
+    {
+        $this->bitField = $bitField;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultConsent()
+    {
+        return $this->defaultConsent;
+    }
+
+    /**
+     * @param int $defaultConsent
+     */
+    public function setDefaultConsent($defaultConsent)
+    {
+        $this->defaultConsent = $defaultConsent;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumEntries()
+    {
+        return $this->numEntries;
+    }
+
+    /**
+     * @param int $numEntries
+     */
+    public function setNumEntries($numEntries)
+    {
+        $this->numEntries = $numEntries;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRangeEntries()
+    {
+        return $this->rangeEntries;
+    }
+
+    /**
+     * @param array $rangeEntries
+     */
+    public function setRangeEntries($rangeEntries)
+    {
+        $this->rangeEntries = $rangeEntries;
+
+        return $this;
     }
 
     public function toArray()
@@ -81,7 +347,6 @@ class ConsentCookie
             "consentLanguage"   => $this->consentLanguage,
             "vendorListVersion" => $this->vendorListVersion,
             "purposesAllowed"   => $this->purposesAllowed,
-            "vendorsAllowed"    => $this->vendorsAllowed,
             "maxVendorId"       => $this->maxVendorId,
             "encodingType"      => $this->encodingType,
             "bitField"          => $this->bitField,
