@@ -46,7 +46,7 @@ class ConsentCookie {
     public function __construct($consent_cookie_string="")
     {
         if (!empty($consent_cookie_string)) {
-            $consent_cookie_string_binary = $this->str2bin($consent_cookie_string);
+            $consent_cookie_string_binary = str2bin($consent_cookie_string);
         }
     }
 
