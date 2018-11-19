@@ -1,6 +1,6 @@
 <?php
 
-namespace Mifefr\ConsentCookie;
+namespace Mifefr\ConsentStringSDKPHP;
 
 /*
  * Holds the info from the consent cookie data
