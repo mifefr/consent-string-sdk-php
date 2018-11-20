@@ -64,7 +64,7 @@ class ConsentCookie
             $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
             $consent_cookie_length = strlen($consent_cookie_string_binary);
             $cookie_base_length = 173;
-            // Below 167 bits, we're missing some data
+            // Below 173 bits, we're missing some data
             if ($consent_cookie_length <= $cookie_base_length) {
                 throw new \InvalidArgumentException(
                     "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_base_length. Cookie : "
