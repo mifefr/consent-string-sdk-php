@@ -62,28 +62,43 @@ class ConsentCookie
     {
         if (!empty($consent_cookie_string)) {
             $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
+            $consent_cookie_length = strlen($consent_cookie_string_binary);
+            $cookie_base_length = 173;
             // Below 167 bits, we're missing some data
-            if (strlen($consent_cookie_string_binary) > 167) {
-                $this->version              = substr($consent_cookie_string_binary, 0, 6);
-                $this->created              = substr($consent_cookie_string_binary, 6, 36);
-                $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
-                $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
-                $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
-                $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
-                $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
-                $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
-                $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
-                $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
-                $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+            if ($consent_cookie_length <= $cookie_base_length) {
+                throw new \InvalidArgumentException(
+                    "The length of the cookie is incorrect. It is $consent_cookie_length and should be at least $cookie_base_length"
+                    . var_export($consent_cookie_string, true)
+                );
+            }
 
-                $encoding_type = (int)$this->encodingType;
-                if (!$encoding_type) {
-                    $this->bitField         = substr($consent_cookie_string_binary, 173, bindec($this->maxVendorId));
+            $this->version              = substr($consent_cookie_string_binary, 0, 6);
+            $this->created              = substr($consent_cookie_string_binary, 6, 36);
+            $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
+            $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
+            $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
+            $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
+            $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
+            $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
+            $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
+            $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
+            $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+
+            $encoding_type = (int)$this->encodingType;
+            if (!$encoding_type) {
+                $max_vendor_id = bindec($this->maxVendorId);
+                $cookie_minimal_length = $cookie_base_length + $max_vendor_id;
+                if ($consent_cookie_length < $cookie_minimal_length) {
+                    throw new \InvalidArgumentException(
+                        "The length of the cookie is incorrect. It is $consent_cookie_length and should be at least $cookie_minimal_length"
+                        . var_export($consent_cookie_string, true)
+                    );
                 }
-                else {
-                    $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
-                    $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
-                }
+                $this->bitField         = substr($consent_cookie_string_binary, 173, $max_vendor_id);
+            }
+            else {
+                $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
+                $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
             }
         }
     }
