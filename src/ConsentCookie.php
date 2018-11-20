@@ -8,6 +8,8 @@ namespace Mifefr\ConsentString;
 
 class ConsentCookie
 {
+    const BINARY_MIN_LENGTH = 173;
+
     /** @var  string $version */
     private $version;
 
@@ -54,78 +56,101 @@ class ConsentCookie
     private $rangeEntries;
 
     /**
-     * Creates a ConsentCookie front a based64 string
+     * Creates a ConsentCookie from a based64 string
      *
-     * @param  string    $consent_cookie_string
+     * @param  string    $consent_cookie
      */
-    public function __construct($consent_cookie_string="")
+    public function __construct($consent_cookie="")
     {
-        if (!empty($consent_cookie_string)) {
-            $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
-            $consent_cookie_length = strlen($consent_cookie_string_binary);
-            $cookie_base_length = 173;
-            // Below 173 bits, we're missing some data
-            if ($consent_cookie_length <= $cookie_base_length) {
-                throw new \InvalidArgumentException(
-                    "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_base_length. Cookie : "
-                    . var_export($consent_cookie_string, true)
-                );
-            }
-
-            $this->version              = substr($consent_cookie_string_binary, 0, 6);
-            $this->created              = substr($consent_cookie_string_binary, 6, 36);
-            $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
-            $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
-            $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
-            $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
-            $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
-            $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
-            $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
-            $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
-            $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
-
+        if (!empty($consent_cookie)) {
+            $consent_cookie_binary = str2bin(base64_decode($consent_cookie));
+            $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH);
+            $this->hydrateFromCookieBinary($consent_cookie_binary);
             $encoding_type = (int)$this->encodingType;
+
             if (!$encoding_type) {
                 $max_vendor_id = bindec($this->maxVendorId);
-                $cookie_minimal_length = $cookie_base_length + $max_vendor_id;
-                if ($consent_cookie_length < $cookie_minimal_length) {
-                    throw new \InvalidArgumentException(
-                        "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_minimal_length. Cookie : "
-                        . var_export($consent_cookie_string, true)
-                    );
-                }
-                $this->bitField         = substr($consent_cookie_string_binary, 173, $max_vendor_id);
+                $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH + $max_vendor_id);
+                $this->bitField = substr($consent_cookie_binary, 173, $max_vendor_id);
             }
             else {
-                $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
-                $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
-
-                $nb_entries = bindec($this->numEntries);
-                $entries = substr($consent_cookie_string_binary, 186);
-
-                $current_bit = 0;
-                $this->rangeEntries = [];
-
-                for ($i = 0; $i < $nb_entries; $i++) {
-                    $entry = [];
-                    $single_or_range = substr($entries, $current_bit, 1);
-                    $current_bit++;
-
-                    $entry['singleOrRange'] = $single_or_range;
-                    if (!(int)$single_or_range) {
-                        $entry['singleVendorId'] = substr($entries, $current_bit, 16);
-                        $current_bit += 16;
-                    }
-                    else {
-                        $entry['startVendorId'] = substr($entries, $current_bit, 16);
-                        $current_bit += 16;
-
-                        $entry['endVendorId'] = substr($entries, $current_bit, 16);
-                        $current_bit += 16;
-                    }
-                    $this->rangeEntries[] = $entry;
-                }
+                $this->defaultConsent   = substr($consent_cookie_binary, 173, 1);
+                $this->numEntries       = substr($consent_cookie_binary, 174, 12);
+                $this->addRangeEntries($consent_cookie_binary);
             }
+        }
+    }
+
+    /**
+     * Hydrate common cookie properties from a binary
+     *
+     * @param $binary
+     */
+    private function hydrateFromCookieBinary($binary)
+    {
+        $this->version              = substr($binary, 0, 6);
+        $this->created              = substr($binary, 6, 36);
+        $this->lastUpdated          = substr($binary, 42, 36);
+        $this->cmpId                = substr($binary, 78, 12);
+        $this->cmpVersion           = substr($binary, 90, 12);
+        $this->consentScreen        = substr($binary, 102, 6);
+        $this->consentLanguage      = substr($binary, 108, 12);
+        $this->vendorListVersion    = substr($binary, 120, 12);
+        $this->purposesAllowed      = substr($binary, 132, 24);
+        $this->maxVendorId          = substr($binary, 156, 16);
+        $this->encodingType         = substr($binary, 172, 1);
+    }
+
+    /**
+     * Check the binary Length
+     *
+     * @param string  $binary
+     * @param integer $binary_min_length
+     */
+    private function checkBinaryLength($binary, $binary_min_length)
+    {
+        $binary_length = strlen($binary);
+
+        if ($binary_length <= $binary_min_length) {
+            throw new \InvalidArgumentException(
+                "The length is incorrect. It has $binary_length bits and should have at least $binary_min_length. Binary : "
+                . var_export($binary, true)
+            );
+        }
+    }
+
+
+    /**
+     * Add range Entries
+     *
+     * @param string $binary
+     */
+    private function addRangeEntries($binary)
+    {
+        $nb_entries = bindec($this->numEntries);
+        $entries = substr($binary, 186);
+
+        $current_bit = 0;
+        $this->rangeEntries = [];
+
+        for ($i = 0; $i < $nb_entries; $i++) {
+            $entry = [];
+            $single_or_range = substr($entries, $current_bit, 1);
+            $current_bit++;
+
+            $entry['singleOrRange'] = $single_or_range;
+            if (!(int)$single_or_range) {
+                $entry['singleVendorId'] = substr($entries, $current_bit, 16);
+                $current_bit += 16;
+            }
+            else {
+                $entry['startVendorId'] = substr($entries, $current_bit, 16);
+                $current_bit += 16;
+
+                $entry['endVendorId'] = substr($entries, $current_bit, 16);
+                $current_bit += 16;
+            }
+            $this->rangeEntries[] = $entry;
         }
     }
 
