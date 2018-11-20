@@ -41,7 +41,7 @@ class ConsentCookie
     /** @var  string $encodingType */
     private $encodingType;
 
-    /** @var  boolean $bitField */
+    /** @var  string $bitField */
     private $bitField;
 
     /** @var  int $defaultConsent */
