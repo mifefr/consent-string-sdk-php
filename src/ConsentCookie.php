@@ -277,7 +277,7 @@ class ConsentCookie
      */
     public function getEncodingType()
     {
-        return $this->encodingType;
+        return (int)$this->encodingType;
     }
 
     /**
