@@ -75,6 +75,15 @@ class ConsentCookie
                 $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
                 $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
                 $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+
+                $encoding_type = (int)$this->encodingType;
+                if (!$encoding_type) {
+                    $this->bitField         = substr($consent_cookie_string_binary, 173, bindec($this->maxVendorId));
+                }
+                else {
+                    $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
+                    $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
+                }
             }
         }
     }
@@ -176,7 +185,7 @@ class ConsentCookie
      */
     public function getConsentScreen()
     {
-        return $this->consentScreen;
+        return $this->consentScreen ? bindec($this->consentScreen) : 0;
     }
 
     /**
@@ -194,7 +203,13 @@ class ConsentCookie
      */
     public function getConsentLanguage()
     {
-        return $this->consentLanguage;
+        if ($this->consentLanguage) {
+            $alphabet = array('A','B','C','D','E','F','G','H','I','J','K', 'L','M','N','O','P','Q','R','S','T','U','V','W','X ','Y','Z');
+            $first_letter = bindec(substr($this->consentLanguage, 0, 6));
+            $second_letter = bindec(substr($this->consentLanguage, 6, 12));
+            return $alphabet[$first_letter].$alphabet[$second_letter];
+        }
+        return "";
     }
 
     /**
@@ -212,7 +227,7 @@ class ConsentCookie
      */
     public function getVendorListVersion()
     {
-        return $this->vendorListVersion;
+        return $this->vendorListVersion ? bindec($this->vendorListVersion) : 0;
     }
 
     /**
@@ -230,7 +245,13 @@ class ConsentCookie
      */
     public function getPurposesAllowed()
     {
-        return $this->purposesAllowed;
+        $purposes_allowed = [];
+        for ($i = 0; $i < strlen($this->purposesAllowed); $i++) {
+            if ($this->purposesAllowed[$i]) {
+                $purposes_allowed[] = $i+1;
+            }
+        }
+        return $purposes_allowed;
     }
 
     /**
@@ -248,7 +269,7 @@ class ConsentCookie
      */
     public function getMaxVendorId()
     {
-        return $this->maxVendorId;
+        return $this->maxVendorId ? bindec($this->maxVendorId) : 0;
     }
 
     /**
@@ -266,7 +287,7 @@ class ConsentCookie
      */
     public function getEncodingType()
     {
-        return $this->encodingType;
+        return (int)$this->encodingType;
     }
 
     /**
@@ -282,7 +303,7 @@ class ConsentCookie
     /**
      * @return bool
      */
-    public function isBitField()
+    public function getBitField()
     {
         return $this->bitField;
     }
@@ -302,7 +323,7 @@ class ConsentCookie
      */
     public function getDefaultConsent()
     {
-        return $this->defaultConsent;
+        return (bool)$this->defaultConsent;
     }
 
     /**
@@ -320,7 +341,7 @@ class ConsentCookie
      */
     public function getNumEntries()
     {
-        return $this->numEntries;
+        return $this->numEntries ? bindec($this->numEntries) : 0;
     }
 
     /**
@@ -351,6 +372,23 @@ class ConsentCookie
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getVendersAllowed()
+    {
+        $vendors_allowed = [];
+        if (!$this->getEncodingType()) {
+            $vendor_ids = $this->getBitField();
+            for ($i = 0; $i < strlen($vendor_ids); $i++) {
+                if ($vendor_ids[$i]) {
+                    $vendors_allowed[] = $i+1;
+                }
+            }
+        }
+        return $vendors_allowed;
+    }
+
     public function toArray()
     {
         return [
@@ -365,10 +403,12 @@ class ConsentCookie
             "purposesAllowed"   => $this->getPurposesAllowed(),
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
-            "bitField"          => $this->isBitField(),
+            "vendorsAllowed"    => $this->getVendersAllowed(),
+
+            "bitField"          => $this->getBitField(),
             "defaultConsent"    => $this->getDefaultConsent(),
             "numEntries"        => $this->getNumEntries(),
-            "rangeEntries"      => $this->getRangeEntries()
+            "rangeEntries"      => $this->getRangeEntries(),
         ];
     }
 }
