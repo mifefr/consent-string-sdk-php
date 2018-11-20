@@ -241,7 +241,13 @@ class ConsentCookie
      */
     public function getPurposesAllowed()
     {
-        return $this->purposesAllowed;
+        $purposes_allowed = [];
+        for ($i = 0; $i < strlen($this->purposesAllowed); $i++) {
+            if ($this->purposesAllowed[$i]) {
+                $purposes_allowed[] = $i+1;
+            }
+        }
+        return $purposes_allowed;
     }
 
     /**
