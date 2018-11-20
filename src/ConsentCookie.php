@@ -65,15 +65,16 @@ class ConsentCookie
             // Below 167 bits, we're missing some data
             if (strlen($consent_cookie_string_binary) > 167) {
                 $this->version              = substr($consent_cookie_string_binary, 0, 6);
-                $this->created              = substr($consent_cookie_string_binary, 6, 42);
-                $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 78);
-                $this->cmpId                = substr($consent_cookie_string_binary, 78, 90);
-                $this->consentScreen        = substr($consent_cookie_string_binary, 96, 102);
-                $this->consentLanguage      = substr($consent_cookie_string_binary, 102, 114);
-                $this->vendorListVersion    = substr($consent_cookie_string_binary, 114, 126);
-                $this->purposesAllowed      = substr($consent_cookie_string_binary, 126, 150);
-                $this->maxVendorId          = substr($consent_cookie_string_binary, 150, 166);
-                $this->encodingType         = substr($consent_cookie_string_binary, 166, 167);
+                $this->created              = substr($consent_cookie_string_binary, 6, 36);
+                $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
+                $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
+                $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 6);
+                $this->consentScreen        = substr($consent_cookie_string_binary, 96, 6);
+                $this->consentLanguage      = substr($consent_cookie_string_binary, 102, 12);
+                $this->vendorListVersion    = substr($consent_cookie_string_binary, 114, 12);
+                $this->purposesAllowed      = substr($consent_cookie_string_binary, 126, 24);
+                $this->maxVendorId          = substr($consent_cookie_string_binary, 150, 16);
+                $this->encodingType         = substr($consent_cookie_string_binary, 166, 1);
             }
         }
     }
