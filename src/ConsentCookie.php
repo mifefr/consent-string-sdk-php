@@ -462,6 +462,40 @@ class ConsentCookie
         return $vendors_allowed;
     }
 
+    /**
+     * @param array $purposes_ids
+     *
+     * @return bool
+     */
+    public function arePurposesAllowed($purposes_ids)
+    {
+        if (empty($purposes_ids)) {
+            return false;
+        }
+
+        $purposes_allowed = $this->getPurposesAllowed();
+        if (empty($purposes_allowed)) {
+            return false;
+        }
+
+        return empty(array_diff($purposes_ids, $purposes_allowed));
+    }
+
+    /**
+     * @param array $vendor_id
+     * @param array $purposes_ids
+     *
+     * @return bool
+     */
+    public function isVendorAllowed($vendor_id, $purposes_ids=[])
+    {
+        if (!empty($purposes_ids) && !$this->arePurposesAllowed($purposes_ids)) {
+            return false;
+        }
+
+        return in_array($vendor_id, $this->getVendorsAllowed());
+    }
+
     public function toArray()
     {
         return [
