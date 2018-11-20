@@ -80,6 +80,10 @@ class ConsentCookie
                 if (!$encoding_type) {
                     $this->bitField         = substr($consent_cookie_string_binary, 173, bindec($this->maxVendorId));
                 }
+                else {
+                    $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
+                    $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
+                }
             }
         }
     }
@@ -319,7 +323,7 @@ class ConsentCookie
      */
     public function getDefaultConsent()
     {
-        return $this->defaultConsent;
+        return (bool)$this->defaultConsent;
     }
 
     /**
@@ -337,7 +341,7 @@ class ConsentCookie
      */
     public function getNumEntries()
     {
-        return $this->numEntries;
+        return $this->numEntries ? bindec($this->numEntries) : 0;
     }
 
     /**
