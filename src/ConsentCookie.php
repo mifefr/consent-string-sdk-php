@@ -84,7 +84,7 @@ class ConsentCookie
      */
     public function getVersion()
     {
-        return $this->version;
+        return $this->version ? bindec($this->version) : 0;
     }
 
     /**
@@ -102,7 +102,8 @@ class ConsentCookie
      */
     public function getCreated()
     {
-        return $this->created;
+        $created_time = \DateTime::createFromFormat("U.u", bindec($this->created)/10);
+        return $created_time ? $created_time->format("Y-m-d H:i:s.u") : false;
     }
 
     /**
@@ -120,7 +121,8 @@ class ConsentCookie
      */
     public function getLastUpdated()
     {
-        return $this->lastUpdated;
+        $last_updated_time = \DateTime::createFromFormat("U.u", bindec($this->lastUpdated)/10);
+        return $last_updated_time ? $last_updated_time->format("Y-m-d H:i:s.u") : false;
     }
 
     /**
@@ -138,7 +140,7 @@ class ConsentCookie
      */
     public function getCmpId()
     {
-        return $this->cmpId;
+        return $this->cmpId ? bindec($this->cmpId) : 0;
     }
 
     /**
