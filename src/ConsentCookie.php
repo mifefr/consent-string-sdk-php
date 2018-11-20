@@ -293,7 +293,7 @@ class ConsentCookie
     /**
      * @return bool
      */
-    public function isBitField()
+    public function getBitField()
     {
         return $this->bitField;
     }
@@ -376,7 +376,7 @@ class ConsentCookie
             "purposesAllowed"   => $this->getPurposesAllowed(),
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
-            "bitField"          => $this->isBitField(),
+            "bitField"          => $this->getBitField(),
             "defaultConsent"    => $this->getDefaultConsent(),
             "numEntries"        => $this->getNumEntries(),
             "rangeEntries"      => $this->getRangeEntries()
