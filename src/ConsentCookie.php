@@ -99,6 +99,32 @@ class ConsentCookie
             else {
                 $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
                 $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
+
+                $nb_entries = bindec($this->numEntries);
+                $entries = substr($consent_cookie_string_binary, 186);
+
+                $current_bit = 0;
+                $this->rangeEntries = [];
+
+                for ($i = 0; $i < $nb_entries; $i++) {
+                    $entry = [];
+                    $single_or_range = substr($entries, $current_bit, 1);
+                    $current_bit++;
+
+                    $entry['singleOrRange'] = $single_or_range;
+                    if (!(bool)$single_or_range) {
+                        $entry['singleVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+                    }
+                    else {
+                        $entry['startVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+
+                        $entry['endVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+                    }
+                    $this->rangeEntries[] = $entry;
+                }
             }
         }
     }
