@@ -457,7 +457,7 @@ class ConsentCookie
                 }
             }
 
-            $vendors_allowed = (!$this->getDefaultConsent()) ? $listed_vendors : array_diff(range(1, $this->getMaxVendorId()), $listed_vendors);
+            $vendors_allowed = (!$this->getDefaultConsent()) ? $listed_vendors : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
         }
         return $vendors_allowed;
     }
