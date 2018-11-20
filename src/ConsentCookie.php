@@ -433,7 +433,7 @@ class ConsentCookie
     /**
      * @return array
      */
-    public function getVendersAllowed()
+    public function getVendorsAllowed()
     {
         $vendors_allowed = [];
         if (!$this->getEncodingType()) {
@@ -476,7 +476,7 @@ class ConsentCookie
             "purposesAllowed"   => $this->getPurposesAllowed(),
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
-            "vendorsAllowed"    => $this->getVendersAllowed(),
+            "vendorsAllowed"    => $this->getVendorsAllowed(),
 
             "bitField"          => $this->getBitField(),
             "defaultConsent"    => $this->getDefaultConsent(),
