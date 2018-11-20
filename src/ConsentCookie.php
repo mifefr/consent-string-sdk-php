@@ -41,7 +41,7 @@ class ConsentCookie
     /** @var  string $encodingType */
     private $encodingType;
 
-    /** @var  boolean $bitField */
+    /** @var  string $bitField */
     private $bitField;
 
     /** @var  int $defaultConsent */
@@ -62,27 +62,68 @@ class ConsentCookie
     {
         if (!empty($consent_cookie_string)) {
             $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
-            // Below 167 bits, we're missing some data
-            if (strlen($consent_cookie_string_binary) > 167) {
-                $this->version              = substr($consent_cookie_string_binary, 0, 6);
-                $this->created              = substr($consent_cookie_string_binary, 6, 36);
-                $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
-                $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
-                $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
-                $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
-                $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
-                $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
-                $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
-                $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
-                $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+            $consent_cookie_length = strlen($consent_cookie_string_binary);
+            $cookie_base_length = 173;
+            // Below 173 bits, we're missing some data
+            if ($consent_cookie_length <= $cookie_base_length) {
+                throw new \InvalidArgumentException(
+                    "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_base_length. Cookie : "
+                    . var_export($consent_cookie_string, true)
+                );
+            }
 
-                $encoding_type = (int)$this->encodingType;
-                if (!$encoding_type) {
-                    $this->bitField         = substr($consent_cookie_string_binary, 173, bindec($this->maxVendorId));
+            $this->version              = substr($consent_cookie_string_binary, 0, 6);
+            $this->created              = substr($consent_cookie_string_binary, 6, 36);
+            $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
+            $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
+            $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
+            $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
+            $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
+            $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
+            $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
+            $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
+            $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+
+            $encoding_type = (int)$this->encodingType;
+            if (!$encoding_type) {
+                $max_vendor_id = bindec($this->maxVendorId);
+                $cookie_minimal_length = $cookie_base_length + $max_vendor_id;
+                if ($consent_cookie_length < $cookie_minimal_length) {
+                    throw new \InvalidArgumentException(
+                        "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_minimal_length. Cookie : "
+                        . var_export($consent_cookie_string, true)
+                    );
                 }
-                else {
-                    $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
-                    $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
+                $this->bitField         = substr($consent_cookie_string_binary, 173, $max_vendor_id);
+            }
+            else {
+                $this->defaultConsent   = substr($consent_cookie_string_binary, 173, 1);
+                $this->numEntries       = substr($consent_cookie_string_binary, 174, 12);
+
+                $nb_entries = bindec($this->numEntries);
+                $entries = substr($consent_cookie_string_binary, 186);
+
+                $current_bit = 0;
+                $this->rangeEntries = [];
+
+                for ($i = 0; $i < $nb_entries; $i++) {
+                    $entry = [];
+                    $single_or_range = substr($entries, $current_bit, 1);
+                    $current_bit++;
+
+                    $entry['singleOrRange'] = $single_or_range;
+                    if (!(int)$single_or_range) {
+                        $entry['singleVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+                    }
+                    else {
+                        $entry['startVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+
+                        $entry['endVendorId'] = substr($entries, $current_bit, 16);
+                        $current_bit += 16;
+                    }
+                    $this->rangeEntries[] = $entry;
                 }
             }
         }
@@ -359,7 +400,24 @@ class ConsentCookie
      */
     public function getRangeEntries()
     {
-        return $this->rangeEntries;
+        $range_entries = [];
+        foreach ($this->rangeEntries as $range_entry) {
+            $entry = [];
+
+            $single_or_range = (int)$range_entry['singleOrRange'];
+            $entry['singleOrRange'] = $single_or_range;
+
+            if (!$single_or_range) {
+                $entry['singleVendorId'] = bindec($range_entry['singleVendorId']);
+            }
+            else {
+                $entry['startVendorId'] = bindec($range_entry['startVendorId']);
+                $entry['endVendorId'] = bindec($range_entry['endVendorId']);
+            }
+
+            $range_entries[] = $entry;
+        }
+        return $range_entries;
     }
 
     /**
@@ -375,7 +433,7 @@ class ConsentCookie
     /**
      * @return array
      */
-    public function getVendersAllowed()
+    public function getVendorsAllowed()
     {
         $vendors_allowed = [];
         if (!$this->getEncodingType()) {
@@ -385,6 +443,21 @@ class ConsentCookie
                     $vendors_allowed[] = $i+1;
                 }
             }
+        }
+        else {
+            $range_entries = $this->getRangeEntries();
+            $listed_vendors = [];
+
+            foreach ($range_entries as $range_entry) {
+                if (!$range_entry['singleOrRange']) {
+                    $listed_vendors[] = $range_entry['singleVendorId'];
+                }
+                else {
+                    $listed_vendors = array_merge($listed_vendors, range($range_entry['startVendorId'], $range_entry['endVendorId']));
+                }
+            }
+
+            $vendors_allowed = (!$this->getDefaultConsent()) ? $listed_vendors : array_diff(range(1, $this->getMaxVendorId()), $listed_vendors);
         }
         return $vendors_allowed;
     }
@@ -403,12 +476,7 @@ class ConsentCookie
             "purposesAllowed"   => $this->getPurposesAllowed(),
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
-            "vendorsAllowed"    => $this->getVendersAllowed(),
-
-            "bitField"          => $this->getBitField(),
-            "defaultConsent"    => $this->getDefaultConsent(),
-            "numEntries"        => $this->getNumEntries(),
-            "rangeEntries"      => $this->getRangeEntries(),
+            "vendorsAllowed"    => $this->getVendorsAllowed(),
         ];
     }
 }
