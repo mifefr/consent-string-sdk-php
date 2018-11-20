@@ -67,7 +67,7 @@ class ConsentCookie
             // Below 167 bits, we're missing some data
             if ($consent_cookie_length <= $cookie_base_length) {
                 throw new \InvalidArgumentException(
-                    "The length of the cookie is incorrect. It is $consent_cookie_length and should be at least $cookie_base_length"
+                    "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_base_length. Cookie : "
                     . var_export($consent_cookie_string, true)
                 );
             }
@@ -90,7 +90,7 @@ class ConsentCookie
                 $cookie_minimal_length = $cookie_base_length + $max_vendor_id;
                 if ($consent_cookie_length < $cookie_minimal_length) {
                     throw new \InvalidArgumentException(
-                        "The length of the cookie is incorrect. It is $consent_cookie_length and should be at least $cookie_minimal_length"
+                        "The length of the cookie is incorrect. It has $consent_cookie_length bits and should have at least $cookie_minimal_length. Cookie : "
                         . var_export($consent_cookie_string, true)
                     );
                 }
