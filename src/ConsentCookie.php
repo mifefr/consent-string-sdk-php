@@ -112,7 +112,7 @@ class ConsentCookie
                     $current_bit++;
 
                     $entry['singleOrRange'] = $single_or_range;
-                    if (!(bool)$single_or_range) {
+                    if (!(int)$single_or_range) {
                         $entry['singleVendorId'] = substr($entries, $current_bit, 16);
                         $current_bit += 16;
                     }
@@ -400,7 +400,24 @@ class ConsentCookie
      */
     public function getRangeEntries()
     {
-        return $this->rangeEntries;
+        $range_entries = [];
+        foreach ($this->rangeEntries as $range_entry) {
+            $entry = [];
+
+            $single_or_range = (int)$range_entry['singleOrRange'];
+            $entry['singleOrRange'] = $single_or_range;
+
+            if (!$single_or_range) {
+                $entry['singleVendorId'] = bindec($range_entry['singleVendorId']);
+            }
+            else {
+                $entry['startVendorId'] = bindec($range_entry['startVendorId']);
+                $entry['endVendorId'] = bindec($range_entry['endVendorId']);
+            }
+
+            $range_entries[] = $entry;
+        }
+        return $range_entries;
     }
 
     /**
