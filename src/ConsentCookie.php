@@ -61,7 +61,7 @@ class ConsentCookie
     public function __construct($consent_cookie_string="")
     {
         if (!empty($consent_cookie_string)) {
-            $consent_cookie_string_binary = str2bin($consent_cookie_string);
+            $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
             // Below 167 bits, we're missing some data
             if (strlen($consent_cookie_string_binary) > 167) {
                 $this->version              = substr($consent_cookie_string_binary, 0, 6);
