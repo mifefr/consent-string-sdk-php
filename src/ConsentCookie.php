@@ -75,6 +75,11 @@ class ConsentCookie
                 $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
                 $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
                 $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+
+                $encoding_type = (int)$this->encodingType;
+                if (!$encoding_type) {
+                    $this->bitField         = substr($consent_cookie_string_binary, 173, bindec($this->maxVendorId));
+                }
             }
         }
     }
