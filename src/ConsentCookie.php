@@ -351,21 +351,21 @@ class ConsentCookie
     public function toArray()
     {
         return [
-            "version"           => $this->version,
-            "created"           => $this->created,
-            "lastUpdated"       => $this->lastUpdated,
-            "cmpId"             => $this->cmpId,
-            "cmpVersion"        => $this->cmpVersion,
-            "consentScreen"     => $this->consentScreen,
-            "consentLanguage"   => $this->consentLanguage,
-            "vendorListVersion" => $this->vendorListVersion,
-            "purposesAllowed"   => $this->purposesAllowed,
-            "maxVendorId"       => $this->maxVendorId,
-            "encodingType"      => $this->encodingType,
-            "bitField"          => $this->bitField,
-            "defaultConsent"    => $this-> defaultConsent,
-            "numEntries"        => $this->numEntries,
-            "rangeEntries"      => $this->rangeEntries
+            "version"           => $this->getVersion(),
+            "created"           => $this->getCreated(),
+            "lastUpdated"       => $this->getLastUpdated(),
+            "cmpId"             => $this->getCmpId(),
+            "cmpVersion"        => $this->getCmpVersion(),
+            "consentScreen"     => $this->getConsentScreen(),
+            "consentLanguage"   => $this->getConsentLanguage(),
+            "vendorListVersion" => $this->getVendorListVersion(),
+            "purposesAllowed"   => $this->getPurposesAllowed(),
+            "maxVendorId"       => $this->getMaxVendorId(),
+            "encodingType"      => $this->getEncodingType(),
+            "bitField"          => $this->isBitField(),
+            "defaultConsent"    => $this->getDefaultConsent(),
+            "numEntries"        => $this->getNumEntries(),
+            "rangeEntries"      => $this->getRangeEntries()
         ];
     }
 }
