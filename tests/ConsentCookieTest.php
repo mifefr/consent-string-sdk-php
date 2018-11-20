@@ -127,4 +127,26 @@ class ConsentCookieTest extends TestCase
             "toArray return not valid"
         );
     }
+
+    public function test_arePurposesAllowed()
+    {
+        $consentCookie = new ConsentCookie("BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA");
+
+        $this->assertEquals(false, $consentCookie->arePurposesAllowed([1, 2, 3, 4]), "Purposes should not be allowed");
+        $this->assertEquals(false, $consentCookie->arePurposesAllowed([4, 1, 2, 3]), "Purposes should not be allowed");
+
+        $this->assertEquals(true, $consentCookie->arePurposesAllowed([1, 2, 3]), "Purposes should be allowed");
+        $this->assertEquals(true, $consentCookie->arePurposesAllowed([3, 1, 2]), "Purposes should be allowed");
+    }
+
+    public function test_isVendorAllowed()
+    {
+        $consentCookie = new ConsentCookie("BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA");
+
+        $this->assertEquals(false, $consentCookie->isVendorAllowed(1, [3, 1, 2]), "Vendor should not be allowed");
+        $this->assertEquals(false, $consentCookie->isVendorAllowed(5, [4, 1, 2]), "Vendor should not be allowed");
+
+        $this->assertEquals(true, $consentCookie->isVendorAllowed(5, [3, 1, 2]), "Vendor should be allowed");
+        $this->assertEquals(true, $consentCookie->isVendorAllowed(5), "Vendor should be allowed");
+    }
 }
