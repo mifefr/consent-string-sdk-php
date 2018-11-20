@@ -61,7 +61,21 @@ class ConsentCookie
     public function __construct($consent_cookie_string="")
     {
         if (!empty($consent_cookie_string)) {
-            $consent_cookie_string_binary = str2bin($consent_cookie_string);
+            $consent_cookie_string_binary = str2bin(base64_decode($consent_cookie_string));
+            // Below 167 bits, we're missing some data
+            if (strlen($consent_cookie_string_binary) > 167) {
+                $this->version              = substr($consent_cookie_string_binary, 0, 6);
+                $this->created              = substr($consent_cookie_string_binary, 6, 36);
+                $this->lastUpdated          = substr($consent_cookie_string_binary, 42, 36);
+                $this->cmpId                = substr($consent_cookie_string_binary, 78, 12);
+                $this->cmpVersion           = substr($consent_cookie_string_binary, 90, 12);
+                $this->consentScreen        = substr($consent_cookie_string_binary, 102, 6);
+                $this->consentLanguage      = substr($consent_cookie_string_binary, 108, 12);
+                $this->vendorListVersion    = substr($consent_cookie_string_binary, 120, 12);
+                $this->purposesAllowed      = substr($consent_cookie_string_binary, 132, 24);
+                $this->maxVendorId          = substr($consent_cookie_string_binary, 156, 16);
+                $this->encodingType         = substr($consent_cookie_string_binary, 172, 1);
+            }
         }
     }
 
@@ -70,7 +84,7 @@ class ConsentCookie
      */
     public function getVersion()
     {
-        return $this->version;
+        return $this->version ? bindec($this->version) : 0;
     }
 
     /**
@@ -88,7 +102,8 @@ class ConsentCookie
      */
     public function getCreated()
     {
-        return $this->created;
+        $created_time = \DateTime::createFromFormat("U.u", bindec($this->created)/10);
+        return $created_time ? $created_time->format("Y-m-d H:i:s.u") : false;
     }
 
     /**
@@ -106,7 +121,8 @@ class ConsentCookie
      */
     public function getLastUpdated()
     {
-        return $this->lastUpdated;
+        $last_updated_time = \DateTime::createFromFormat("U.u", bindec($this->lastUpdated)/10);
+        return $last_updated_time ? $last_updated_time->format("Y-m-d H:i:s.u") : false;
     }
 
     /**
@@ -124,7 +140,7 @@ class ConsentCookie
      */
     public function getCmpId()
     {
-        return $this->cmpId;
+        return $this->cmpId ? bindec($this->cmpId) : 0;
     }
 
     /**
@@ -142,7 +158,7 @@ class ConsentCookie
      */
     public function getCmpVersion()
     {
-        return $this->cmpVersion;
+        return $this->cmpVersion ? bindec($this->cmpVersion) : 0;
     }
 
     /**
@@ -338,21 +354,21 @@ class ConsentCookie
     public function toArray()
     {
         return [
-            "version"           => $this->version,
-            "created"           => $this->created,
-            "lastUpdated"       => $this->lastUpdated,
-            "cmpId"             => $this->cmpId,
-            "cmpVersion"        => $this->cmpVersion,
-            "consentScreen"     => $this->consentScreen,
-            "consentLanguage"   => $this->consentLanguage,
-            "vendorListVersion" => $this->vendorListVersion,
-            "purposesAllowed"   => $this->purposesAllowed,
-            "maxVendorId"       => $this->maxVendorId,
-            "encodingType"      => $this->encodingType,
-            "bitField"          => $this->bitField,
-            "defaultConsent"    => $this-> defaultConsent,
-            "numEntries"        => $this->numEntries,
-            "rangeEntries"      => $this->rangeEntries
+            "version"           => $this->getVersion(),
+            "created"           => $this->getCreated(),
+            "lastUpdated"       => $this->getLastUpdated(),
+            "cmpId"             => $this->getCmpId(),
+            "cmpVersion"        => $this->getCmpVersion(),
+            "consentScreen"     => $this->getConsentScreen(),
+            "consentLanguage"   => $this->getConsentLanguage(),
+            "vendorListVersion" => $this->getVendorListVersion(),
+            "purposesAllowed"   => $this->getPurposesAllowed(),
+            "maxVendorId"       => $this->getMaxVendorId(),
+            "encodingType"      => $this->getEncodingType(),
+            "bitField"          => $this->isBitField(),
+            "defaultConsent"    => $this->getDefaultConsent(),
+            "numEntries"        => $this->getNumEntries(),
+            "rangeEntries"      => $this->getRangeEntries()
         ];
     }
 }
