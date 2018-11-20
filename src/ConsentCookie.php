@@ -176,7 +176,7 @@ class ConsentCookie
      */
     public function getConsentScreen()
     {
-        return $this->consentScreen;
+        return $this->consentScreen ? bindec($this->consentScreen) : 0;
     }
 
     /**
@@ -194,7 +194,13 @@ class ConsentCookie
      */
     public function getConsentLanguage()
     {
-        return $this->consentLanguage;
+        if ($this->consentLanguage) {
+            $alphabet = array('A','B','C','D','E','F','G','H','I','J','K', 'L','M','N','O','P','Q','R','S','T','U','V','W','X ','Y','Z');
+            $first_letter = bindec(substr($this->consentLanguage, 0, 6));
+            $second_letter = bindec(substr($this->consentLanguage, 6, 12));
+            return $alphabet[$first_letter].$alphabet[$second_letter];
+        }
+        return "";
     }
 
     /**
@@ -212,7 +218,7 @@ class ConsentCookie
      */
     public function getVendorListVersion()
     {
-        return $this->vendorListVersion;
+        return $this->vendorListVersion ? bindec($this->vendorListVersion) : 0;
     }
 
     /**
@@ -248,7 +254,7 @@ class ConsentCookie
      */
     public function getMaxVendorId()
     {
-        return $this->maxVendorId;
+        return $this->maxVendorId ? bindec($this->maxVendorId) : 0;
     }
 
     /**
