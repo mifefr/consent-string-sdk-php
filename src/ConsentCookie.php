@@ -477,11 +477,6 @@ class ConsentCookie
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
             "vendorsAllowed"    => $this->getVendorsAllowed(),
-
-            "bitField"          => $this->getBitField(),
-            "defaultConsent"    => $this->getDefaultConsent(),
-            "numEntries"        => $this->getNumEntries(),
-            "rangeEntries"      => $this->getRangeEntries(),
         ];
     }
 }
