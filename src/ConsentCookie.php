@@ -362,6 +362,23 @@ class ConsentCookie
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getVendersAllowed()
+    {
+        $vendors_allowed = [];
+        if (!$this->getEncodingType()) {
+            $vendor_ids = $this->getBitField();
+            for ($i = 0; $i < strlen($vendor_ids); $i++) {
+                if ($vendor_ids[$i]) {
+                    $vendors_allowed[] = $i+1;
+                }
+            }
+        }
+        return $vendors_allowed;
+    }
+
     public function toArray()
     {
         return [
@@ -379,7 +396,8 @@ class ConsentCookie
             "bitField"          => $this->getBitField(),
             "defaultConsent"    => $this->getDefaultConsent(),
             "numEntries"        => $this->getNumEntries(),
-            "rangeEntries"      => $this->getRangeEntries()
+            "rangeEntries"      => $this->getRangeEntries(),
+            "vendorsAllowed"    => $this->getVendersAllowed()
         ];
     }
 }
