@@ -134,9 +134,15 @@ class ConsentCookieTest extends TestCase
 
         $this->assertEquals(false, $consentCookie->arePurposesAllowed([1, 2, 3, 4]), "Purposes should not be allowed");
         $this->assertEquals(false, $consentCookie->arePurposesAllowed([4, 1, 2, 3]), "Purposes should not be allowed");
+        $this->assertEquals(false, $consentCookie->arePurposesAllowed([]), "Purposes should not be allowed");
 
         $this->assertEquals(true, $consentCookie->arePurposesAllowed([1, 2, 3]), "Purposes should be allowed");
         $this->assertEquals(true, $consentCookie->arePurposesAllowed([3, 1, 2]), "Purposes should be allowed");
+
+        // Cookie with no allowed purposes
+        $consentCookie_2 = new ConsentCookie("BOXhscYOXhscYACABDENAEAAAAAAyADAALAAcACgAGA");
+
+        $this->assertEquals(false, $consentCookie_2->arePurposesAllowed([1, 2, 3]), "Purposes should not be allowed");
     }
 
     public function test_isVendorAllowed()
