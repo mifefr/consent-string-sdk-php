@@ -444,6 +444,21 @@ class ConsentCookie
                 }
             }
         }
+        else {
+            $range_entries = $this->getRangeEntries();
+            $listed_vendors = [];
+
+            foreach ($range_entries as $range_entry) {
+                if (!$range_entry['singleOrRange']) {
+                    $listed_vendors[] = $range_entry['singleVendorId'];
+                }
+                else {
+                    $listed_vendors = array_merge($listed_vendors, range($range_entry['startVendorId'], $range_entry['endVendorId']));
+                }
+            }
+
+            $vendors_allowed = (!$this->getDefaultConsent()) ? $listed_vendors : array_diff(range(1, $this->getMaxVendorId()), $listed_vendors);
+        }
         return $vendors_allowed;
     }
 
