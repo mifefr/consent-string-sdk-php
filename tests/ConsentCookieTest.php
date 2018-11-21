@@ -169,4 +169,58 @@ class ConsentCookieTest extends TestCase
 
         $consentCookie = new ConsentCookie("BOXiPiyOXiPiyAAABAENAAAAAAAAoA");
     }
+
+    public function test_values_from_setters()
+    {
+        $consentCookie = new ConsentCookie;
+
+        $values =
+        [
+            "Version"           => 1,
+            "Created"           => "2018-11-20 10:23:49.600000",
+            "LastUpdated"       => "2018-11-20 10:23:49.600000",
+            "CmpId"             => 2,
+            "CmpVersion"        => 1,
+            "ConsentScreen"     => 3,
+            "ConsentLanguage"   => "EN",
+            "VendorListVersion" => 4,
+            "PurposesAllowed"   => [
+                1, 2, 3
+            ],
+            "MaxVendorId"       => 12,
+            "EncodingType"      => 1,
+            "BitField"          => "001000010000",
+            "NumEntries"        => 1,
+            "DefaultConsent"    => true,
+            "RangeEntries"      => [
+                [
+                    "singleOrRange"     => 0,
+                    "singleVendorId"    => 5,
+                ],
+                [
+                    "singleOrRange"     => 1,
+                    "startVendorId"     => 7,
+                    "endVendorId"       => 10,
+                ],
+                [
+                    "singleOrRange"     => 0,
+                    "singleVendorId"    => 12,
+                ]
+            ]
+        ];
+
+        // Setter
+        foreach ($values as $name => $value) {
+            $consentCookie->{"set$name"}($value);
+        }
+
+        // AssertEquals
+        foreach ($values as $name => $value) {
+            $this->assertEquals(
+                $value,
+                $consentCookie->{"get$name"}($value),
+                "Setter $name is not valid"
+            );
+        }
+    }
 }

@@ -6,7 +6,8 @@ if (!function_exists('str2bin')) {
      *
      * @param string $str
      */
-    function str2bin($str) {
+    function str2bin($str)
+    {
         $out = false;
 
         for ($a = 0; $a < strlen($str); $a++) {
@@ -18,5 +19,17 @@ if (!function_exists('str2bin')) {
         }
 
         return $out;
+    }
+}
+
+if (!function_exists('zerofill')){
+    /**
+     * Force and complete a string by zero to respect a length
+     *
+     * @param string $str
+     */
+    function zerofill($str, $strlen)
+    {
+        return str_pad($str, $strlen, "0", STR_PAD_LEFT);
     }
 }
