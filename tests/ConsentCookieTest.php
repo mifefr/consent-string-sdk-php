@@ -5,7 +5,7 @@ use Mifefr\ConsentString\ConsentCookie;
 
 class ConsentCookieTest extends TestCase
 {
-    public function testCanBeCreatedFromEmptyConsentCookie()
+    public function test_can_be_created_from_empty()
     {
         $this->assertInstanceOf(
             ConsentCookie::class,
@@ -13,7 +13,7 @@ class ConsentCookieTest extends TestCase
         );
     }
 
-    public function testCanBeCreatedFromStringConsentCookie()
+    public function test_can_be_created_from_string()
     {
         $this->assertInstanceOf(
             ConsentCookie::class,
@@ -21,7 +21,7 @@ class ConsentCookieTest extends TestCase
         );
     }
 
-    public function testValuesFromStringConsentCookie()
+    public function test_values_from_string()
     {
         $consentCookie = new ConsentCookie("BOXhscYOXhscYACABDENAE4AAAAAwQgA");
 
@@ -43,7 +43,7 @@ class ConsentCookieTest extends TestCase
         $this->isEmpty($consentCookie->getBitField());
     }
 
-    public function testRangeEntriesValuesConsentCookie()
+    public function test_range_entries_values()
     {
         $consentCookie = new ConsentCookie("BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA");
 
@@ -75,7 +75,7 @@ class ConsentCookieTest extends TestCase
         $this->assertEquals(1, $consentCookie_2->getDefaultConsent(), "DefaultConsent value not valid");
     }
 
-    public function testRangeEntriesToArrayConsentCookie()
+    public function test_range_entries_toArray()
     {
         $consentCookie = new ConsentCookie("BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA");
 
@@ -154,5 +154,19 @@ class ConsentCookieTest extends TestCase
 
         $this->assertEquals(true, $consentCookie->isVendorAllowed(5, [3, 1, 2]), "Vendor should be allowed");
         $this->assertEquals(true, $consentCookie->isVendorAllowed(5), "Vendor should be allowed");
+    }
+
+    public function test_checkBinaryLength_base_data()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $consentCookie = new ConsentCookie("BOXiPiyOXiPiyAAABAENAAAAoAA");
+    }
+
+    public function test_checkBinaryLength_bitfield_data()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $consentCookie = new ConsentCookie("BOXiPiyOXiPiyAAABAENAAAAAAAAoA");
     }
 }
