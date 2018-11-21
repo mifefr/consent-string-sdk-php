@@ -155,4 +155,18 @@ class ConsentCookieTest extends TestCase
         $this->assertEquals(true, $consentCookie->isVendorAllowed(5, [3, 1, 2]), "Vendor should be allowed");
         $this->assertEquals(true, $consentCookie->isVendorAllowed(5), "Vendor should be allowed");
     }
+
+    public function test_checkBinaryLength_base_data()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $consentCookie = new ConsentCookie("BOXiPiyOXiPiyAAABAENAAAAoAA");
+    }
+
+    public function test_checkBinaryLength_bitfield_data()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $consentCookie = new ConsentCookie("BOXiPiyOXiPiyAAABAENAAAAAAAAoA");
+    }
 }
