@@ -33,3 +33,17 @@ if (!function_exists('zerofill')){
         return str_pad($str, $strlen, "0", STR_PAD_LEFT);
     }
 }
+
+if (!function_exists('decodeWebSafeString')){
+    /*
+     * Format string to non websafe format
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    function decodeWebSafeString($string)
+    {
+        return str_replace(['-', '_'], ['+', '/'], $string);
+    }
+}

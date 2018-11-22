@@ -223,4 +223,11 @@ class ConsentCookieTest extends TestCase
             );
         }
     }
+
+    public function test_decodeWebSafeString()
+    {
+        $consentCookie = new ConsentCookie("BOXHb99OXHb_BAOABBFRB2-AAAAid7_______9______9uz_Gv_v_f__33e8__9v_l_7_-___u_-33d4-_1vf99yfm1-7ftr3tp_86ues2_Xur_959__3z27EA");
+
+        $this->assertEquals([1, 2, 3, 4, 5], $consentCookie->getPurposesAllowed(), "PurposesAllowed value not valid. Websafe decode failed.");
+    }
 }
