@@ -63,7 +63,7 @@ class ConsentCookie
     public function __construct($consent_cookie="")
     {
         if (!empty($consent_cookie)) {
-            $consent_cookie_binary = str2bin(base64_decode($consent_cookie));
+            $consent_cookie_binary = str2bin(base64_decode($this->decodeWebSafeString($consent_cookie)));
             $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH);
             $this->hydrateFromCookieBinary($consent_cookie_binary);
             $encoding_type = (int)$this->encodingType;
@@ -559,6 +559,18 @@ class ConsentCookie
             }
             $this->rangeEntries[] = $entry;
         }
+    }
+
+    /*
+     * Format string to non websafe format
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    private function decodeWebSafeString($string)
+    {
+        return str_replace(['-', '_'], ['+', '/'], $string);
     }
 
     /**
