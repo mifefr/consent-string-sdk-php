@@ -2,7 +2,7 @@
     "name": "mifefr/consent-string-sdk-php",
     "description": "Transparency and Consent Framework: Consent String SDK (PHP)",
     "type": "library",
-    "keywords": ["consent", "iab", "cookie", "library", "consent"],
+    "keywords": ["consent", "iab", "cookie", "library", "gpdr", "rgpd"],
     "license": "MIT",
     "authors": [
         {
