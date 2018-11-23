@@ -23,7 +23,6 @@ $base64IAB = "BOXhscYOXhscYACABDENAE4AAAAAwQgA";
 $consent = new ConsentString( $base64IAB );
 
 echo $consent->getConsentLanguage();
-
 // EN
 ```
 
