@@ -9,6 +9,7 @@ Transparency and Consent Framework: Consent String SDK (PHP)
 
 
 ## Install
+Install with composer:
 ```bach
 composer require mifefr/consent-string-sdk-php
 ```
