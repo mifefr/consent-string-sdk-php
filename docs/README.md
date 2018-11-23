@@ -53,7 +53,7 @@
 Creates a ConsentCookie from a based64 string
 
 ```php
-ConsentCookie::__construct( string $consent_cookie = &quot;&quot; )
+ConsentCookie::__construct( string $consent_cookie = "" )
 ```
 
 
