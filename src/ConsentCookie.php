@@ -112,7 +112,7 @@ class ConsentCookie
     }
 
     /**
-     * @param string $created format "Y-m-d H:i:s.u"
+     * @param string $created format : "Y-m-d H:i:s.u"
      *
      * @return ConsentCookie
      */
@@ -136,7 +136,7 @@ class ConsentCookie
     }
 
     /**
-     * @param string $lastUpdated "Y-m-d H:i:s.u"
+     * @param string $lastUpdated format : "Y-m-d H:i:s.u"
      *
      * @return ConsentCookie
      */
