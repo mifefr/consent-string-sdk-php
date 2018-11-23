@@ -139,7 +139,7 @@ ConsentCookie::setCreated( string $created ): \Mifefr\ConsentString\ConsentCooki
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `$created` | **string** | format "Y-m-d H:i:s.u" |
+| `$created` | **string** | format : "Y-m-d H:i:s.u" |
 
 
 
@@ -177,7 +177,7 @@ ConsentCookie::setLastUpdated( string $lastUpdated ): \Mifefr\ConsentString\Cons
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `$lastUpdated` | **string** | "Y-m-d H:i:s.u" |
+| `$lastUpdated` | **string** | format : "Y-m-d H:i:s.u" |
 
 
 
