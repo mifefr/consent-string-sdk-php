@@ -234,13 +234,7 @@ class ConsentCookieEntity
      */
     public function getPurposesAllowed()
     {
-        $purposes_allowed = [];
-        for ($i = 0; $i < strlen($this->purposesAllowed); $i++) {
-            if ($this->purposesAllowed[$i]) {
-                $purposes_allowed[] = $i+1;
-            }
-        }
-        return $purposes_allowed;
+        return browseAndStoreBitValues($this->purposesAllowed);
     }
 
     /**

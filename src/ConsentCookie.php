@@ -41,14 +41,8 @@ class ConsentCookie extends ConsentCookieEntity
      */
     public function getVendorsAllowed()
     {
-        $vendors_allowed = [];
-
         if (! $this->getEncodingType()) {
-            for ($i = 0; $i < strlen($this->getBitField()); $i++) {
-                if ($this->getBitField()[$i]) {
-                    $vendors_allowed[] = $i + 1;
-                }
-            }
+            $vendors_allowed = browseAndStoreBitValues($this->getBitField());
         }
         else {
             $listed_vendors = [];
