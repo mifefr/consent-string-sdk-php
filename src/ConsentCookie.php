@@ -423,7 +423,7 @@ class ConsentCookie
         foreach($rangeEntries as $key => $rangeEntry) {
             $rangeEntries[$key]['singleOrRange'] = (string)$rangeEntry['singleOrRange'];
 
-            if (!$rangeEntry['singleOrRange']) {
+            if (! $rangeEntry['singleOrRange']) {
                 $rangeEntries[$key]['singleVendorId'] = zerofill(decbin($rangeEntry['singleVendorId']), 12);
             }
             else {
@@ -444,10 +444,10 @@ class ConsentCookie
     {
         $vendors_allowed = [];
 
-        if (!$this->getEncodingType()) {
+        if (! $this->getEncodingType()) {
             for ($i = 0; $i < strlen($this->getBitField()); $i++) {
                 if ($this->getBitField()[$i]) {
-                    $vendors_allowed[] = $i+1;
+                    $vendors_allowed[] = $i + 1;
                 }
             }
         }
@@ -463,7 +463,7 @@ class ConsentCookie
                 }
             }
 
-            $vendors_allowed = (!$this->getDefaultConsent()) ? $listed_vendors : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
+            $vendors_allowed = ! $this->getDefaultConsent() ? $listed_vendors : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
         }
         return $vendors_allowed;
     }
@@ -588,10 +588,10 @@ class ConsentCookie
      */
     public function isVendorAllowed($vendor_id, $purposes_ids=[])
     {
-        if (!empty($purposes_ids) && !$this->arePurposesAllowed($purposes_ids)) {
-            return false;
+        if(empty($purposes_ids) || $this->arePurposesAllowed($purposes_ids)) {
+            return in_array($vendor_id, $this->getVendorsAllowed());
         }
 
-        return in_array($vendor_id, $this->getVendorsAllowed());
+        return false;
     }
 }
