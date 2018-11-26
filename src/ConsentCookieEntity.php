@@ -65,7 +65,7 @@ class ConsentCookieEntity
     /**
      * @param string $version
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setVersion($version)
     {
@@ -87,7 +87,7 @@ class ConsentCookieEntity
     /**
      * @param string $created format : "Y-m-d H:i:s.u"
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setCreated($created)
     {
@@ -111,7 +111,7 @@ class ConsentCookieEntity
     /**
      * @param string $lastUpdated format : "Y-m-d H:i:s.u"
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setLastUpdated($lastUpdated)
     {
@@ -133,7 +133,7 @@ class ConsentCookieEntity
     /**
      * @param string $cmpId
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setCmpId($cmpId)
     {
@@ -153,7 +153,7 @@ class ConsentCookieEntity
     /**
      * @param string $cmpVersion
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setCmpVersion($cmpVersion)
     {
@@ -173,7 +173,7 @@ class ConsentCookieEntity
     /**
      * @param string $consentScreen
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setConsentScreen($consentScreen)
     {
@@ -196,7 +196,7 @@ class ConsentCookieEntity
     /**
      * @param string $consentLanguage
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setConsentLanguage($consentLanguage)
     {
@@ -220,7 +220,7 @@ class ConsentCookieEntity
     /**
      * @param string $vendorListVersion
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setVendorListVersion($vendorListVersion)
     {
@@ -246,7 +246,7 @@ class ConsentCookieEntity
     /**
      * @param array $purposesAllowed
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setPurposesAllowed($purposesAllowed)
     {
@@ -272,7 +272,7 @@ class ConsentCookieEntity
     /**
      * @param int $maxVendorId
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setMaxVendorId($maxVendorId)
     {
@@ -292,7 +292,7 @@ class ConsentCookieEntity
     /**
      * @param string $encodingType
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setEncodingType($encodingType)
     {
@@ -312,7 +312,7 @@ class ConsentCookieEntity
     /**
      * @param string $bitField
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setBitField($bitField)
     {
@@ -332,7 +332,7 @@ class ConsentCookieEntity
     /**
      * @param bool $defaultConsent
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setDefaultConsent($defaultConsent)
     {
@@ -352,7 +352,7 @@ class ConsentCookieEntity
     /**
      * @param int $numEntries
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setNumEntries($numEntries)
     {
@@ -389,7 +389,7 @@ class ConsentCookieEntity
     /**
      * @param array $rangeEntries
      *
-     * @return ConsentCookie
+     * @return ConsentCookieEntity
      */
     public function setRangeEntries($rangeEntries)
     {
@@ -427,7 +427,6 @@ class ConsentCookieEntity
             "purposesAllowed"   => $this->getPurposesAllowed(),
             "maxVendorId"       => $this->getMaxVendorId(),
             "encodingType"      => $this->getEncodingType(),
-            "vendorsAllowed"    => $this->getVendorsAllowed(),
         ];
     }
 }

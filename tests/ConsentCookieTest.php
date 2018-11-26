@@ -94,9 +94,6 @@ class ConsentCookieTest extends TestCase
                 ],
                 "maxVendorId"       => 12,
                 "encodingType"      => 1,
-                "vendorsAllowed"    => [
-                    5, 7, 8, 9, 10, 12
-                ],
             ],
             $consentCookie->toArray(),
             "toArray return not valid"
@@ -119,9 +116,6 @@ class ConsentCookieTest extends TestCase
                 ],
                 "maxVendorId"       => 12,
                 "encodingType"      => 1,
-                "vendorsAllowed"    => [
-                    1, 2, 3, 4, 6, 11
-                ],
             ],
             $consentCookie_2->toArray(),
             "toArray return not valid"
