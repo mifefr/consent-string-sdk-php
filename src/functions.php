@@ -47,3 +47,25 @@ if (!function_exists('decodeWebSafeString')){
         return str_replace(['-', '_'], ['+', '/'], $string);
     }
 }
+
+if (!function_exists('browseAndStoreBitValues')) {
+    /*
+     * Browse and store bit values
+     *
+     * @param string $bits
+     *
+     * @return array
+     */
+    function browseAndStoreBitValues($bits)
+    {
+        $values = [];
+
+        for ($i = 0; $i < strlen($bits); $i++) {
+            if ($bits[$i]) {
+                $values[] = $i + 1;
+            }
+        }
+
+        return $values;
+    }
+}
