@@ -10,6 +10,73 @@ class ConsentCookie extends ConsentCookieEntity
 {
     const BINARY_MIN_LENGTH = 173;
 
+    const BINARY_CONFIG = [
+        "version"           => [
+            "start"     => 0,
+            "length"    => 6,
+        ],
+        "created"           => [
+            "start"     => 6,
+            "length"    => 36,
+        ],
+        "lastUpdated"       => [
+            "start"     => 42,
+            "length"    => 36,
+        ],
+        "cmpId"             => [
+            "start"     => 78,
+            "length"    => 12,
+        ],
+        "cmpVersion"        => [
+            "start"     => 90,
+            "length"    => 12,
+        ],
+        "consentScreen"     => [
+            "start"     => 102,
+            "length"    => 6,
+        ],
+        "consentLanguage"   => [
+            "start"     => 108,
+            "length"    => 12,
+        ],
+        "vendorListVersion" => [
+            "start"     => 120,
+            "length"    => 12,
+        ],
+        "purposesAllowed"   => [
+            "start"     => 132,
+            "length"    => 24,
+        ],
+        "maxVendorId"       => [
+            "start"     => 156,
+            "length"    => 16,
+        ],
+        "encodingType"      => [
+            "start"     => 172,
+            "length"    => 1,
+        ],
+        "defaultConsent"    => [
+            "start"     => 173,
+            "length"    => 1,
+        ],
+        "bitField"          => [
+            "start"     => 173,
+        ],
+        "numEntries"        => [
+            "start"     => 174,
+            "length"    => 12,
+        ],
+        "rangeEntries"      => [
+            "start"     => 186,
+            "length"    => [
+                "singleOrRange"     => 1,
+                'singleVendorId'    => 16,
+                'startVendorId'     => 16,
+                'endVendorId'       => 16,
+            ]
+        ]
+    ];
+
     /**
      * Creates a ConsentCookie from a based64 string
      *
@@ -26,11 +93,11 @@ class ConsentCookie extends ConsentCookieEntity
             if (!$encoding_type) {
                 $max_vendor_id = bindec($this->maxVendorId);
                 $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH + $max_vendor_id);
-                $this->bitField = substr($consent_cookie_binary, 173, $max_vendor_id);
+                $this->createFromConfig("bitField", $consent_cookie_binary, $max_vendor_id);
             }
             else {
-                $this->defaultConsent   = substr($consent_cookie_binary, 173, 1);
-                $this->numEntries       = substr($consent_cookie_binary, 174, 12);
+                $this->createFromConfig("defaultConsent", $consent_cookie_binary);
+                $this->createFromConfig("numEntries", $consent_cookie_binary);
                 $this->addRangeEntries($consent_cookie_binary);
             }
         }
@@ -68,17 +135,38 @@ class ConsentCookie extends ConsentCookieEntity
      */
     private function hydrateFromCookieBinary($binary)
     {
-        $this->version              = substr($binary, 0, 6);
-        $this->created              = substr($binary, 6, 36);
-        $this->lastUpdated          = substr($binary, 42, 36);
-        $this->cmpId                = substr($binary, 78, 12);
-        $this->cmpVersion           = substr($binary, 90, 12);
-        $this->consentScreen        = substr($binary, 102, 6);
-        $this->consentLanguage      = substr($binary, 108, 12);
-        $this->vendorListVersion    = substr($binary, 120, 12);
-        $this->purposesAllowed      = substr($binary, 132, 24);
-        $this->maxVendorId          = substr($binary, 156, 16);
-        $this->encodingType         = substr($binary, 172, 1);
+        $common_properties = [
+            "version",
+            "created",
+            "lastUpdated",
+            "cmpId",
+            "cmpVersion",
+            "consentScreen",
+            "consentLanguage",
+            "vendorListVersion",
+            "purposesAllowed",
+            "maxVendorId",
+            "encodingType",
+        ] ;
+
+        foreach ($common_properties as $property) {
+            $this->createFromConfig($property, $binary);
+        }
+    }
+
+
+    /**
+     * @param string    $name
+     * @param string    $binary
+     * @param int|null  $length
+     */
+    private function createFromConfig($name, $binary, $length = null)
+    {
+        $this->$name = substr(
+            $binary,
+            self::BINARY_CONFIG[$name]["start"],
+            is_null($length) ? self::BINARY_CONFIG[$name]["length"] : $length
+        );
     }
 
     /**
@@ -107,27 +195,28 @@ class ConsentCookie extends ConsentCookieEntity
     private function addRangeEntries($binary)
     {
         $nb_entries = bindec($this->numEntries);
-        $entries = substr($binary, 186);
+        $entries = substr($binary, self::BINARY_CONFIG["rangeEntries"]["start"]);
+        $lengths = self::BINARY_CONFIG["rangeEntries"]["length"];
 
         $current_bit = 0;
         $this->rangeEntries = [];
 
         for ($i = 0; $i < $nb_entries; $i++) {
-            $entry = [];
-            $single_or_range = substr($entries, $current_bit, 1);
-            $current_bit++;
+            $entry = [
+                'singleOrRange' => substr($entries, $current_bit, $lengths['singleOrRange']),
+            ];
+            $current_bit += $lengths['singleOrRange'];
 
-            $entry['singleOrRange'] = $single_or_range;
-            if (!(int)$single_or_range) {
-                $entry['singleVendorId'] = substr($entries, $current_bit, 16);
-                $current_bit += 16;
+            if (!(int)$entry['singleOrRange']) {
+                $entry['singleVendorId'] = substr($entries, $current_bit, $lengths['singleVendorId']);
+                $current_bit += $lengths['singleVendorId'];
             }
             else {
-                $entry['startVendorId'] = substr($entries, $current_bit, 16);
-                $current_bit += 16;
+                $entry['startVendorId'] = substr($entries, $current_bit, $lengths['startVendorId']);
+                $current_bit += $lengths['startVendorId'];
 
-                $entry['endVendorId'] = substr($entries, $current_bit, 16);
-                $current_bit += 16;
+                $entry['endVendorId'] = substr($entries, $current_bit, $lengths['endVendorId']);
+                $current_bit += $lengths['endVendorId'];
             }
             $this->rangeEntries[] = $entry;
         }

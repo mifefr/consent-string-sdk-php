@@ -190,6 +190,7 @@ class ConsentCookieEntity
         $alphabet = range('A', 'Z');
         $first_letter = bindec(substr($this->consentLanguage, 0, 6));
         $second_letter = bindec(substr($this->consentLanguage, 6, 12));
+
         return $alphabet[$first_letter].$alphabet[$second_letter];
     }
 
