@@ -104,6 +104,39 @@ class ConsentCookie extends ConsentCookieEntity
     }
 
     /**
+     * Return the consent cookie string like send by IAB
+     *
+     * @return string $consent_cookie
+     */
+    public function toBase64()
+    {
+        $consent_cookie = $this->version
+                        . $this->created
+                        . $this->lastUpdated
+                        . $this->cmpId
+                        . $this->cmpVersion
+                        . $this->consentScreen
+                        . $this->consentLanguage
+                        . $this->vendorListVersion
+                        . $this->purposesAllowed
+                        . $this->maxVendorId
+                        . $this->encodingType;
+
+        if (! $this->encodingType) {
+            $consent_cookie .= $this->bitField;
+        }
+        else {
+            $consent_cookie .= $this->defaultConsent
+                            . $this->numEntries
+                            . $this->getBinaryRangeEntries();
+        }
+
+        $base64 = encodeWebSafeString(base64_encode(bin2str($consent_cookie)));
+
+        return str_replace("=", "", $base64);
+    }
+
+    /**
      * @return array
      */
     public function getVendorsAllowed()
@@ -147,7 +180,7 @@ class ConsentCookie extends ConsentCookieEntity
             "purposesAllowed",
             "maxVendorId",
             "encodingType",
-        ] ;
+        ];
 
         foreach ($common_properties as $property) {
             $this->createFromConfig($property, $binary);
@@ -220,6 +253,25 @@ class ConsentCookie extends ConsentCookieEntity
             }
             $this->rangeEntries[] = $entry;
         }
+    }
+
+    /**
+     * Get binary range Entries
+     *
+     * @return string $binary
+     */
+    private function getBinaryRangeEntries()
+    {
+        $binary = "";
+
+        foreach($this->rangeEntries as $rangeEntry) {
+            $binary .= $rangeEntry['singleOrRange'];
+            $binary .= isset($rangeEntry['singleVendorId'])
+                    ? $rangeEntry['singleVendorId']
+                    : $rangeEntry['startVendorId'].$rangeEntry['endVendorId'];
+        }
+
+        return $binary;
     }
 
     /**
