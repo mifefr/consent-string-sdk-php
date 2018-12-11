@@ -22,6 +22,27 @@ if (!function_exists('str2bin')) {
     }
 }
 
+if (!function_exists('bin2str')) {
+    function bin2str($binary)
+    {
+        // 8 bits
+        $binary = chunk_split($binary, 8, ' ');
+        if(substr($binary, -1) === ' ') {
+            $binary = substr($binary, 0, -1);
+        }
+
+        $binaryArray = explode(' ', $binary);
+
+        $string = '';
+        foreach ($binaryArray as $bin) {
+            $bin = str_pad($bin, 8, 0, STR_PAD_RIGHT);
+            $string .= chr(bindec($bin));
+        }
+
+        return $string;
+    }
+}
+
 if (!function_exists('zerofill')){
     /**
      * Force and complete a string by zero to respect a length
@@ -36,7 +57,7 @@ if (!function_exists('zerofill')){
 
 if (!function_exists('decodeWebSafeString')){
     /*
-     * Format string to non websafe format
+     * Format string to no websafe format
      *
      * @param string $string
      *
@@ -45,6 +66,20 @@ if (!function_exists('decodeWebSafeString')){
     function decodeWebSafeString($string)
     {
         return str_replace(['-', '_'], ['+', '/'], $string);
+    }
+}
+
+if (!function_exists('encodeWebSafeString')){
+    /*
+     * Format string to websafe format
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    function encodeWebSafeString($string)
+    {
+        return str_replace(['+', '/'], ['-', '_'], $string);
     }
 }
 
