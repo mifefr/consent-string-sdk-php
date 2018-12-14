@@ -673,7 +673,7 @@ ConsentCookie::toArray(  ): array
 Creates a ConsentCookie from a based64 string
 
 ```php
-ConsentCookie::__construct( string $consent_cookie =  )
+ConsentCookie::__construct( string $consent_cookie =  '')
 ```
 
 
