@@ -3,7 +3,6 @@
 ## Table of Contents
 
 * [ConsentCookie](#consentcookie)
-    * [__construct](#__construct)
     * [getVersion](#getversion)
     * [setVersion](#setversion)
     * [getCreated](#getcreated)
@@ -34,10 +33,44 @@
     * [setNumEntries](#setnumentries)
     * [getRangeEntries](#getrangeentries)
     * [setRangeEntries](#setrangeentries)
-    * [getVendorsAllowed](#getvendorsallowed)
     * [toArray](#toarray)
+    * [__construct](#__construct)
+    * [toBase64](#tobase64)
+    * [getVendorsAllowed](#getvendorsallowed)
     * [arePurposesAllowed](#arepurposesallowed)
     * [isVendorAllowed](#isvendorallowed)
+* [ConsentCookieEntity](#consentcookieentity)
+    * [getVersion](#getversion-1)
+    * [setVersion](#setversion-1)
+    * [getCreated](#getcreated-1)
+    * [setCreated](#setcreated-1)
+    * [getLastUpdated](#getlastupdated-1)
+    * [setLastUpdated](#setlastupdated-1)
+    * [getCmpId](#getcmpid-1)
+    * [setCmpId](#setcmpid-1)
+    * [getCmpVersion](#getcmpversion-1)
+    * [setCmpVersion](#setcmpversion-1)
+    * [getConsentScreen](#getconsentscreen-1)
+    * [setConsentScreen](#setconsentscreen-1)
+    * [getConsentLanguage](#getconsentlanguage-1)
+    * [setConsentLanguage](#setconsentlanguage-1)
+    * [getVendorListVersion](#getvendorlistversion-1)
+    * [setVendorListVersion](#setvendorlistversion-1)
+    * [getPurposesAllowed](#getpurposesallowed-1)
+    * [setPurposesAllowed](#setpurposesallowed-1)
+    * [getMaxVendorId](#getmaxvendorid-1)
+    * [setMaxVendorId](#setmaxvendorid-1)
+    * [getEncodingType](#getencodingtype-1)
+    * [setEncodingType](#setencodingtype-1)
+    * [getBitField](#getbitfield-1)
+    * [setBitField](#setbitfield-1)
+    * [getDefaultConsent](#getdefaultconsent-1)
+    * [setDefaultConsent](#setdefaultconsent-1)
+    * [getNumEntries](#getnumentries-1)
+    * [setNumEntries](#setnumentries-1)
+    * [getRangeEntries](#getrangeentries-1)
+    * [setRangeEntries](#setrangeentries-1)
+    * [toArray](#toarray-1)
 
 ## ConsentCookie
 
@@ -46,29 +79,8 @@
 
 
 * Full name: \Mifefr\ConsentString\ConsentCookie
+* Parent class: \Mifefr\ConsentString\ConsentCookieEntity
 
-
-### __construct
-
-Creates a ConsentCookie from a based64 string
-
-```php
-ConsentCookie::__construct( string $consent_cookie = "" )
-```
-
-
-
-
-**Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `$consent_cookie` | **string** |  |
-
-
-
-
----
 
 ### getVersion
 
@@ -91,7 +103,7 @@ ConsentCookie::getVersion(  ): string
 
 
 ```php
-ConsentCookie::setVersion( string $version ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setVersion( string $version ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -129,7 +141,7 @@ ConsentCookie::getCreated(  ): string
 
 
 ```php
-ConsentCookie::setCreated( string $created ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setCreated( string $created ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -167,7 +179,7 @@ ConsentCookie::getLastUpdated(  ): string
 
 
 ```php
-ConsentCookie::setLastUpdated( string $lastUpdated ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setLastUpdated( string $lastUpdated ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -205,7 +217,7 @@ ConsentCookie::getCmpId(  ): string
 
 
 ```php
-ConsentCookie::setCmpId( string $cmpId ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setCmpId( string $cmpId ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -243,7 +255,7 @@ ConsentCookie::getCmpVersion(  ): string
 
 
 ```php
-ConsentCookie::setCmpVersion( string $cmpVersion ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setCmpVersion( string $cmpVersion ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -281,7 +293,7 @@ ConsentCookie::getConsentScreen(  ): string
 
 
 ```php
-ConsentCookie::setConsentScreen( string $consentScreen ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setConsentScreen( string $consentScreen ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -319,7 +331,7 @@ ConsentCookie::getConsentLanguage(  ): string
 
 
 ```php
-ConsentCookie::setConsentLanguage( string $consentLanguage ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setConsentLanguage( string $consentLanguage ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -357,7 +369,7 @@ ConsentCookie::getVendorListVersion(  ): string
 
 
 ```php
-ConsentCookie::setVendorListVersion( string $vendorListVersion ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setVendorListVersion( string $vendorListVersion ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -395,7 +407,7 @@ ConsentCookie::getPurposesAllowed(  ): array
 
 
 ```php
-ConsentCookie::setPurposesAllowed( array $purposesAllowed ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setPurposesAllowed( array $purposesAllowed ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -433,7 +445,7 @@ ConsentCookie::getMaxVendorId(  ): integer
 
 
 ```php
-ConsentCookie::setMaxVendorId( integer $maxVendorId ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setMaxVendorId( integer $maxVendorId ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -471,7 +483,7 @@ ConsentCookie::getEncodingType(  ): string
 
 
 ```php
-ConsentCookie::setEncodingType( string $encodingType ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setEncodingType( string $encodingType ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -509,7 +521,7 @@ ConsentCookie::getBitField(  ): string
 
 
 ```php
-ConsentCookie::setBitField( string $bitField ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setBitField( string $bitField ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -547,7 +559,7 @@ ConsentCookie::getDefaultConsent(  ): boolean
 
 
 ```php
-ConsentCookie::setDefaultConsent( boolean $defaultConsent ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setDefaultConsent( boolean $defaultConsent ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -585,7 +597,7 @@ ConsentCookie::getNumEntries(  ): integer
 
 
 ```php
-ConsentCookie::setNumEntries( integer $numEntries ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setNumEntries( integer $numEntries ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -623,7 +635,7 @@ ConsentCookie::getRangeEntries(  ): array
 
 
 ```php
-ConsentCookie::setRangeEntries( array $rangeEntries ): \Mifefr\ConsentString\ConsentCookie
+ConsentCookie::setRangeEntries( array $rangeEntries ): \Mifefr\ConsentString\ConsentCookieEntity
 ```
 
 
@@ -640,12 +652,12 @@ ConsentCookie::setRangeEntries( array $rangeEntries ): \Mifefr\ConsentString\Con
 
 ---
 
-### getVendorsAllowed
+### toArray
 
 
 
 ```php
-ConsentCookie::getVendorsAllowed(  ): array
+ConsentCookie::toArray(  ): array
 ```
 
 
@@ -656,12 +668,54 @@ ConsentCookie::getVendorsAllowed(  ): array
 
 ---
 
-### toArray
+### __construct
+
+Creates a ConsentCookie from a based64 string
+
+```php
+ConsentCookie::__construct( string $consent_cookie = &#039;&#039; )
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$consent_cookie` | **string** |  |
+
+
+
+
+---
+
+### toBase64
+
+Return the consent cookie string like send by IAB
+
+```php
+ConsentCookie::toBase64(  ): string
+```
+
+
+
+
+
+**Return Value:**
+
+$consent_cookie
+
+
+
+---
+
+### getVendorsAllowed
 
 
 
 ```php
-ConsentCookie::toArray(  ): array
+ConsentCookie::getVendorsAllowed(  ): array
 ```
 
 
@@ -699,7 +753,7 @@ ConsentCookie::arePurposesAllowed( array $purposes_ids ): boolean
 
 
 ```php
-ConsentCookie::isVendorAllowed( array $vendor_id, array $purposes_ids = array() ): boolean
+ConsentCookie::isVendorAllowed( integer $vendor_id, array $purposes_ids = array() ): boolean
 ```
 
 
@@ -709,8 +763,603 @@ ConsentCookie::isVendorAllowed( array $vendor_id, array $purposes_ids = array() 
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `$vendor_id` | **array** |  |
+| `$vendor_id` | **integer** |  |
 | `$purposes_ids` | **array** |  |
+
+
+
+
+---
+
+## ConsentCookieEntity
+
+
+
+
+
+* Full name: \Mifefr\ConsentString\ConsentCookieEntity
+
+
+### getVersion
+
+
+
+```php
+ConsentCookieEntity::getVersion(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setVersion
+
+
+
+```php
+ConsentCookieEntity::setVersion( string $version ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$version` | **string** |  |
+
+
+
+
+---
+
+### getCreated
+
+
+
+```php
+ConsentCookieEntity::getCreated(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setCreated
+
+
+
+```php
+ConsentCookieEntity::setCreated( string $created ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$created` | **string** | format : "Y-m-d H:i:s.u" |
+
+
+
+
+---
+
+### getLastUpdated
+
+
+
+```php
+ConsentCookieEntity::getLastUpdated(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setLastUpdated
+
+
+
+```php
+ConsentCookieEntity::setLastUpdated( string $lastUpdated ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$lastUpdated` | **string** | format : "Y-m-d H:i:s.u" |
+
+
+
+
+---
+
+### getCmpId
+
+
+
+```php
+ConsentCookieEntity::getCmpId(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setCmpId
+
+
+
+```php
+ConsentCookieEntity::setCmpId( string $cmpId ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$cmpId` | **string** |  |
+
+
+
+
+---
+
+### getCmpVersion
+
+
+
+```php
+ConsentCookieEntity::getCmpVersion(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setCmpVersion
+
+
+
+```php
+ConsentCookieEntity::setCmpVersion( string $cmpVersion ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$cmpVersion` | **string** |  |
+
+
+
+
+---
+
+### getConsentScreen
+
+
+
+```php
+ConsentCookieEntity::getConsentScreen(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setConsentScreen
+
+
+
+```php
+ConsentCookieEntity::setConsentScreen( string $consentScreen ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$consentScreen` | **string** |  |
+
+
+
+
+---
+
+### getConsentLanguage
+
+
+
+```php
+ConsentCookieEntity::getConsentLanguage(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setConsentLanguage
+
+
+
+```php
+ConsentCookieEntity::setConsentLanguage( string $consentLanguage ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$consentLanguage` | **string** |  |
+
+
+
+
+---
+
+### getVendorListVersion
+
+
+
+```php
+ConsentCookieEntity::getVendorListVersion(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setVendorListVersion
+
+
+
+```php
+ConsentCookieEntity::setVendorListVersion( string $vendorListVersion ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$vendorListVersion` | **string** |  |
+
+
+
+
+---
+
+### getPurposesAllowed
+
+
+
+```php
+ConsentCookieEntity::getPurposesAllowed(  ): array
+```
+
+
+
+
+
+
+
+---
+
+### setPurposesAllowed
+
+
+
+```php
+ConsentCookieEntity::setPurposesAllowed( array $purposesAllowed ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$purposesAllowed` | **array** |  |
+
+
+
+
+---
+
+### getMaxVendorId
+
+
+
+```php
+ConsentCookieEntity::getMaxVendorId(  ): integer
+```
+
+
+
+
+
+
+
+---
+
+### setMaxVendorId
+
+
+
+```php
+ConsentCookieEntity::setMaxVendorId( integer $maxVendorId ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$maxVendorId` | **integer** |  |
+
+
+
+
+---
+
+### getEncodingType
+
+
+
+```php
+ConsentCookieEntity::getEncodingType(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setEncodingType
+
+
+
+```php
+ConsentCookieEntity::setEncodingType( string $encodingType ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$encodingType` | **string** |  |
+
+
+
+
+---
+
+### getBitField
+
+
+
+```php
+ConsentCookieEntity::getBitField(  ): string
+```
+
+
+
+
+
+
+
+---
+
+### setBitField
+
+
+
+```php
+ConsentCookieEntity::setBitField( string $bitField ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$bitField` | **string** |  |
+
+
+
+
+---
+
+### getDefaultConsent
+
+
+
+```php
+ConsentCookieEntity::getDefaultConsent(  ): boolean
+```
+
+
+
+
+
+
+
+---
+
+### setDefaultConsent
+
+
+
+```php
+ConsentCookieEntity::setDefaultConsent( boolean $defaultConsent ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$defaultConsent` | **boolean** |  |
+
+
+
+
+---
+
+### getNumEntries
+
+
+
+```php
+ConsentCookieEntity::getNumEntries(  ): integer
+```
+
+
+
+
+
+
+
+---
+
+### setNumEntries
+
+
+
+```php
+ConsentCookieEntity::setNumEntries( integer $numEntries ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$numEntries` | **integer** |  |
+
+
+
+
+---
+
+### getRangeEntries
+
+
+
+```php
+ConsentCookieEntity::getRangeEntries(  ): array
+```
+
+
+
+
+
+
+
+---
+
+### setRangeEntries
+
+
+
+```php
+ConsentCookieEntity::setRangeEntries( array $rangeEntries ): \Mifefr\ConsentString\ConsentCookieEntity
+```
+
+
+
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `$rangeEntries` | **array** |  |
+
+
+
+
+---
+
+### toArray
+
+
+
+```php
+ConsentCookieEntity::toArray(  ): array
+```
+
+
+
 
 
 
@@ -720,4 +1369,4 @@ ConsentCookie::isVendorAllowed( array $vendor_id, array $purposes_ids = array() 
 
 
 --------
-> This document was automatically generated from source code comments on 2018-11-23 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
+> This document was automatically generated from source code comments on 2018-12-14 using [phpDocumentor](http://www.phpdoc.org/) and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
