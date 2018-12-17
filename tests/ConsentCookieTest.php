@@ -44,20 +44,20 @@ class ConsentCookieTest extends TestCase
 
     public function test_to_string_from_string()
     {
-        $consentCookieString = "BOXhscYOXhscYACABDENAE4AAAAAwQgA";
+        $consentCookieString = 'BOXhscYOXhscYACABDENAE4AAAAAwQgA';
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), "toString value is not valid");
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
     }
 
     public function test_range_entries_to_string_from_string()
     {
-        $consentCookieString = "BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA";
+        $consentCookieString = 'BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA';
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), "toString value is not valid");
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
     }
 
     public function test_range_entries_values()
@@ -171,14 +171,14 @@ class ConsentCookieTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $consentCookie = new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAoAA');
+        new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAoAA');
     }
 
     public function test_checkBinaryLength_bitfield_data()
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $consentCookie = new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAAAAAoA');
+        new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAAAAAoA');
     }
 
     public function test_values_from_setters()

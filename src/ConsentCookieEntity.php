@@ -8,6 +8,9 @@ namespace Mifefr\ConsentString;
  */
 class ConsentCookieEntity
 {
+    const EncodingType_BitField  = 0;
+    const EncodingType_Range     = 1;
+
     /** @var  string $version */
     protected $version;
 
@@ -61,13 +64,19 @@ class ConsentCookieEntity
         return $this->version ? bindec($this->version) : 0;
     }
 
+
     /**
-     * @param string $version
+     * @param integer $version
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setVersion($version)
     {
+        if ($version < 0 || $version > 64) {
+            throw new \ErrorException('The version be an integer between 0 and 64');
+        }
+
         $this->version = decbin($version);
 
         return $this;
@@ -87,10 +96,15 @@ class ConsentCookieEntity
      * @param string $created format : "Y-m-d H:i:s.u"
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setCreated($created)
     {
         $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created);
+
+        if (! $createdDatetime) {
+            throw new \ErrorException('The created must be a string with a date at format "Y-m-d H:i:s.u"');
+        }
 
         $this->created = decbin($createdDatetime->format('U.u') * 10);
 
@@ -111,10 +125,15 @@ class ConsentCookieEntity
      * @param string $lastUpdated format : "Y-m-d H:i:s.u"
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setLastUpdated($lastUpdated)
     {
         $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated);
+
+        if (! $lastUpdatedDatetime) {
+            throw new \ErrorException('The last updated must be a string with a date at format "Y-m-d H:i:s.u"');
+        }
 
         $this->lastUpdated = decbin($lastUpdatedDatetime->format('U.u') * 10);
 
@@ -122,7 +141,7 @@ class ConsentCookieEntity
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getCmpId()
     {
@@ -130,19 +149,24 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param string $cmpId
+     * @param integer $cmpId
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setCmpId($cmpId)
     {
+        if ($cmpId < 0 || $cmpId > 65535) {
+            throw new \ErrorException('The cmpId must be an integer between 0 and 65535');
+        }
+
         $this->cmpId = decbin($cmpId);
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getCmpVersion()
     {
@@ -150,19 +174,24 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param string $cmpVersion
+     * @param integer $cmpVersion
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setCmpVersion($cmpVersion)
     {
+        if ($cmpVersion < 0 || $cmpVersion > 65535) {
+            throw new \ErrorException('The cmpVersion must be an integer between 0 and 65535');
+        }
+
         $this->cmpVersion = decbin($cmpVersion);
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getConsentScreen()
     {
@@ -170,12 +199,17 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param string $consentScreen
+     * @param integer $consentScreen
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setConsentScreen($consentScreen)
     {
+        if ($consentScreen < 0 || $consentScreen > 64) {
+            throw new \ErrorException('The consentScreen must be an integer between 0 and 64');
+        }
+
         $this->consentScreen = decbin($consentScreen);
 
         return $this;
@@ -197,12 +231,18 @@ class ConsentCookieEntity
      * @param string $consentLanguage
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setConsentLanguage($consentLanguage)
     {
-        $alphabet = range('A', 'Z');
-        $first_letter  = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
-        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
+        try {
+            $alphabet = range('A', 'Z');
+            $first_letter = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
+            $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
+        }
+        catch (\Exception $e) {
+            throw new \ErrorException('The consentLangueage must be an string of two letters');
+        }
 
         $this->consentLanguage = $first_letter.$second_letter;
 
@@ -210,7 +250,7 @@ class ConsentCookieEntity
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getVendorListVersion()
     {
@@ -218,12 +258,17 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param string $vendorListVersion
+     * @param integer $vendorListVersion
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setVendorListVersion($vendorListVersion)
     {
+        if ($vendorListVersion < 0 || $vendorListVersion > 65535) {
+            throw new \ErrorException('The consentScreen must be an integer between 0 and 65535');
+        }
+
         $this->vendorListVersion = decbin($vendorListVersion);
 
         return $this;
@@ -241,9 +286,14 @@ class ConsentCookieEntity
      * @param array $purposesAllowed
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setPurposesAllowed($purposesAllowed)
     {
+        if (! is_array($purposesAllowed) || count($purposesAllowed) > 24) {
+            throw new \ErrorException('The purposesAllowed must be an array of maximum 24 values');
+        }
+
         $purposesAllowedBits = str_pad('', 24, '0');
 
         foreach ($purposesAllowed as $purpose) {
@@ -256,7 +306,7 @@ class ConsentCookieEntity
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getMaxVendorId()
     {
@@ -264,19 +314,24 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param int $maxVendorId
+     * @param integer $maxVendorId
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setMaxVendorId($maxVendorId)
     {
+        if ($maxVendorId < 1 || $maxVendorId > 65535) {
+            throw new \ErrorException('The consentScreen must be an integer between 1 and 65535');
+        }
+
         $this->maxVendorId = decbin($maxVendorId);
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getEncodingType()
     {
@@ -284,12 +339,17 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param string $encodingType
+     * @param integer $encodingType
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setEncodingType($encodingType)
     {
+        if ($encodingType > 1  || $encodingType < 0) {
+            throw new \ErrorException(
+                'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
+        }
         $this->encodingType = (string)$encodingType;
 
         return $this;
@@ -327,16 +387,21 @@ class ConsentCookieEntity
      * @param bool $defaultConsent
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setDefaultConsent($defaultConsent)
     {
+        if (! is_bool($defaultConsent)) {
+            throw new \ErrorException('The defaultConsent must be a boolean');
+        }
+
         $this->defaultConsent = (string)$defaultConsent;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function getNumEntries()
     {
@@ -344,12 +409,17 @@ class ConsentCookieEntity
     }
 
     /**
-     * @param int $numEntries
+     * @param integer $numEntries
      *
      * @return ConsentCookieEntity
+     * @throws \ErrorException
      */
     public function setNumEntries($numEntries)
     {
+        if ($numEntries < 0 || $numEntries > 65535) {
+            throw new \ErrorException('The $numEntries must be an integer between 0 and 65535');
+        }
+
         $this->numEntries = decbin($numEntries);
 
         return $this;
