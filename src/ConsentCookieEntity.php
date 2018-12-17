@@ -235,14 +235,12 @@ class ConsentCookieEntity
      */
     public function setConsentLanguage($consentLanguage)
     {
-        try {
-            $alphabet = range('A', 'Z');
-            $first_letter = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
-            $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
+        if (strlen($consentLanguage) !== 2 && ctype_upper($consentLanguage) && ctype_alpha($consentLanguage)) {
+            throw new \ErrorException('The consentLanguage must be an string of two upper letters');
         }
-        catch (\Exception $e) {
-            throw new \ErrorException('The consentLangueage must be an string of two letters');
-        }
+        $alphabet = range('A', 'Z');
+        $first_letter = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
+        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
 
         $this->consentLanguage = $first_letter.$second_letter;
 
@@ -417,7 +415,7 @@ class ConsentCookieEntity
     public function setNumEntries($numEntries)
     {
         if ($numEntries < 0 || $numEntries > 65535) {
-            throw new \ErrorException('The $numEntries must be an integer between 0 and 65535');
+            throw new \ErrorException('The numEntries must be an integer between 0 and 65535');
         }
 
         $this->numEntries = decbin($numEntries);
