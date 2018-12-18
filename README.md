@@ -18,11 +18,16 @@ composer require mifefr/consent-string-sdk-php
 ```php
 use Mifefr\ConsentString;
 
-$base64IAB = "BOXhscYOXhscYACABDENAE4AAAAAwQgA";
+$base64IAB = 'BOXhscYOXhscYACABDENAE4AAAAAwQgA';
 $consent = new ConsentCookie( $base64IAB );
 
 echo $consent->getConsentLanguage();
 // EN
+
+$consent->setConsentLanguage( 'FR' );
+
+echo $consent->toBase64();
+// BOXhscYOXhscYACABDFRAE4AAAAAwQgA
 ```
 
 ## Documentation

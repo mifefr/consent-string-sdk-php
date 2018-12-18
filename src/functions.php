@@ -5,14 +5,16 @@ if (!function_exists('str2bin')) {
      * Convert a string to binary
      *
      * @param string $str
+     *
+     * @return string $out
      */
     function str2bin($str)
     {
-        $out = false;
+        $out = '';
 
-        for ($a = 0; $a < strlen($str); $a++) {
+        foreach (str_split($str) as $char) {
             //determine symbol ASCII-code
-            $dec = ord(substr($str, $a, 1));
+            $dec = ord($char);
             //convert to binary representation and add leading zeros
             $bin = sprintf('%08d', base_convert($dec, 10, 2));
             $out .= $bin;
@@ -47,11 +49,13 @@ if (!function_exists('zerofill')){
     /**
      * Force and complete a string by zero to respect a length
      *
-     * @param string $str
+     * @param string    $str
+     * @param integer   $strLen
+     * @return string
      */
-    function zerofill($str, $strlen)
+    function zerofill($str, $strLen)
     {
-        return str_pad($str, $strlen, "0", STR_PAD_LEFT);
+        return str_pad($str, $strLen, 0, STR_PAD_LEFT);
     }
 }
 
@@ -95,9 +99,9 @@ if (!function_exists('browseAndStoreBitValues')) {
     {
         $values = [];
 
-        for ($i = 0; $i < strlen($bits); $i++) {
-            if ($bits[$i]) {
-                $values[] = $i + 1;
+        foreach (str_split($bits) as $index => $bit) {
+            if ($bit) {
+                $values[] = $index + 1;
             }
         }
 

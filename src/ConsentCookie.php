@@ -11,65 +11,65 @@ class ConsentCookie extends ConsentCookieEntity
     const BINARY_MIN_LENGTH = 173;
 
     const BINARY_CONFIG = [
-        "version"           => [
-            "start"     => 0,
-            "length"    => 6,
+        'version'           => [
+            'start'     => 0,
+            'length'    => 6,
         ],
-        "created"           => [
-            "start"     => 6,
-            "length"    => 36,
+        'created'           => [
+            'start'     => 6,
+            'length'    => 36,
         ],
-        "lastUpdated"       => [
-            "start"     => 42,
-            "length"    => 36,
+        'lastUpdated'       => [
+            'start'     => 42,
+            'length'    => 36,
         ],
-        "cmpId"             => [
-            "start"     => 78,
-            "length"    => 12,
+        'cmpId'             => [
+            'start'     => 78,
+            'length'    => 12,
         ],
-        "cmpVersion"        => [
-            "start"     => 90,
-            "length"    => 12,
+        'cmpVersion'        => [
+            'start'     => 90,
+            'length'    => 12,
         ],
-        "consentScreen"     => [
-            "start"     => 102,
-            "length"    => 6,
+        'consentScreen'     => [
+            'start'     => 102,
+            'length'    => 6,
         ],
-        "consentLanguage"   => [
-            "start"     => 108,
-            "length"    => 12,
+        'consentLanguage'   => [
+            'start'     => 108,
+            'length'    => 12,
         ],
-        "vendorListVersion" => [
-            "start"     => 120,
-            "length"    => 12,
+        'vendorListVersion' => [
+            'start'     => 120,
+            'length'    => 12,
         ],
-        "purposesAllowed"   => [
-            "start"     => 132,
-            "length"    => 24,
+        'purposesAllowed'   => [
+            'start'     => 132,
+            'length'    => 24,
         ],
-        "maxVendorId"       => [
-            "start"     => 156,
-            "length"    => 16,
+        'maxVendorId'       => [
+            'start'     => 156,
+            'length'    => 16,
         ],
-        "encodingType"      => [
-            "start"     => 172,
-            "length"    => 1,
+        'encodingType'      => [
+            'start'     => 172,
+            'length'    => 1,
         ],
-        "defaultConsent"    => [
-            "start"     => 173,
-            "length"    => 1,
+        'defaultConsent'    => [
+            'start'     => 173,
+            'length'    => 1,
         ],
-        "bitField"          => [
-            "start"     => 173,
+        'bitField'          => [
+            'start'     => 173,
         ],
-        "numEntries"        => [
-            "start"     => 174,
-            "length"    => 12,
+        'numEntries'        => [
+            'start'     => 174,
+            'length'    => 12,
         ],
-        "rangeEntries"      => [
-            "start"     => 186,
-            "length"    => [
-                "singleOrRange"     => 1,
+        'rangeEntries'      => [
+            'start'     => 186,
+            'length'    => [
+                'singleOrRange'     => 1,
                 'singleVendorId'    => 16,
                 'startVendorId'     => 16,
                 'endVendorId'       => 16,
@@ -82,7 +82,7 @@ class ConsentCookie extends ConsentCookieEntity
      *
      * @param  string    $consent_cookie
      */
-    public function __construct($consent_cookie="")
+    public function __construct($consent_cookie = '')
     {
         if (!empty($consent_cookie)) {
             $consent_cookie_binary = str2bin(base64_decode(decodeWebSafeString($consent_cookie)));
@@ -93,11 +93,11 @@ class ConsentCookie extends ConsentCookieEntity
             if (!$encoding_type) {
                 $max_vendor_id = bindec($this->maxVendorId);
                 $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH + $max_vendor_id);
-                $this->createFromConfig("bitField", $consent_cookie_binary, $max_vendor_id);
+                $this->createFromConfig('bitField', $consent_cookie_binary, $max_vendor_id);
             }
             else {
-                $this->createFromConfig("defaultConsent", $consent_cookie_binary);
-                $this->createFromConfig("numEntries", $consent_cookie_binary);
+                $this->createFromConfig('defaultConsent', $consent_cookie_binary);
+                $this->createFromConfig('numEntries', $consent_cookie_binary);
                 $this->addRangeEntries($consent_cookie_binary);
             }
         }
@@ -133,7 +133,7 @@ class ConsentCookie extends ConsentCookieEntity
 
         $base64 = encodeWebSafeString(base64_encode(bin2str($consent_cookie)));
 
-        return str_replace("=", "", $base64);
+        return str_replace('=', '', $base64);
     }
 
     /**
@@ -146,17 +146,24 @@ class ConsentCookie extends ConsentCookieEntity
         }
         else {
             $listed_vendors = [];
+            $listed_vendors_ranges = [];
 
             foreach ($this->getRangeEntries() as $range_entry) {
                 if (!$range_entry['singleOrRange']) {
                     $listed_vendors[] = $range_entry['singleVendorId'];
                 }
                 else {
-                    $listed_vendors = array_merge($listed_vendors, range($range_entry['startVendorId'], $range_entry['endVendorId']));
+                    $listed_vendors_ranges[] = range($range_entry['startVendorId'], $range_entry['endVendorId']);
                 }
             }
 
-            $vendors_allowed = ! $this->getDefaultConsent() ? $listed_vendors : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
+            if (! empty($listed_vendors_ranges)) {
+                $listed_vendors = array_merge($listed_vendors, ...$listed_vendors_ranges);
+            }
+
+            $vendors_allowed =  ! $this->getDefaultConsent()
+                                ? $listed_vendors
+                                : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
         }
         return $vendors_allowed;
     }
@@ -169,18 +176,18 @@ class ConsentCookie extends ConsentCookieEntity
     private function hydrateFromCookieBinary($binary)
     {
         $common_properties = [
-            "version",
-            "created",
-            "lastUpdated",
-            "cmpId",
-            "cmpVersion",
-            "consentScreen",
-            "consentLanguage",
-            "vendorListVersion",
-            "purposesAllowed",
-            "maxVendorId",
-            "encodingType",
-        ];
+            'version',
+            'created',
+            'lastUpdated',
+            'cmpId',
+            'cmpVersion',
+            'consentScreen',
+            'consentLanguage',
+            'vendorListVersion',
+            'purposesAllowed',
+            'maxVendorId',
+            'encodingType',
+        ] ;
 
         foreach ($common_properties as $property) {
             $this->createFromConfig($property, $binary);
@@ -197,8 +204,8 @@ class ConsentCookie extends ConsentCookieEntity
     {
         $this->$name = substr(
             $binary,
-            self::BINARY_CONFIG[$name]["start"],
-            is_null($length) ? self::BINARY_CONFIG[$name]["length"] : $length
+            self::BINARY_CONFIG[$name]['start'],
+            $length === null ? self::BINARY_CONFIG[$name]['length'] : $length
         );
     }
 
@@ -228,8 +235,8 @@ class ConsentCookie extends ConsentCookieEntity
     private function addRangeEntries($binary)
     {
         $nb_entries = bindec($this->numEntries);
-        $entries = substr($binary, self::BINARY_CONFIG["rangeEntries"]["start"]);
-        $lengths = self::BINARY_CONFIG["rangeEntries"]["length"];
+        $entries = substr($binary, self::BINARY_CONFIG['rangeEntries']['start']);
+        $lengths = self::BINARY_CONFIG['rangeEntries']['length'];
 
         $current_bit = 0;
         $this->rangeEntries = [];
@@ -262,7 +269,7 @@ class ConsentCookie extends ConsentCookieEntity
      */
     private function getBinaryRangeEntries()
     {
-        $binary = "";
+        $binary = '';
 
         foreach($this->rangeEntries as $rangeEntry) {
             $binary .= $rangeEntry['singleOrRange'];
@@ -294,15 +301,15 @@ class ConsentCookie extends ConsentCookieEntity
     }
 
     /**
-     * @param array $vendor_id
-     * @param array $purposes_ids
+     * @param integer   $vendor_id
+     * @param array     $purposes_ids
      *
      * @return bool
      */
-    public function isVendorAllowed($vendor_id, $purposes_ids=[])
+    public function isVendorAllowed($vendor_id, $purposes_ids = [])
     {
         if(empty($purposes_ids) || $this->arePurposesAllowed($purposes_ids)) {
-            return in_array($vendor_id, $this->getVendorsAllowed());
+            return in_array($vendor_id, $this->getVendorsAllowed(), true);
         }
 
         return false;

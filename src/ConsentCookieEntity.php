@@ -6,7 +6,6 @@ namespace Mifefr\ConsentString;
 /*
  * ConsentCookie Entity
  */
-
 class ConsentCookieEntity
 {
     /** @var  string $version */
@@ -79,9 +78,9 @@ class ConsentCookieEntity
      */
     public function getCreated()
     {
-        $created_time = \DateTime::createFromFormat("U.u", bindec($this->created)/10);
+        $created_time = \DateTime::createFromFormat('U.u', bindec($this->created)/10);
 
-        return $created_time ? $created_time->format("Y-m-d H:i:s.u") : false;
+        return $created_time ? $created_time->format('Y-m-d H:i:s.u') : false;
     }
 
     /**
@@ -91,9 +90,9 @@ class ConsentCookieEntity
      */
     public function setCreated($created)
     {
-        $createdDatetime = \Datetime::createFromFormat("Y-m-d H:i:s.u", $created);
+        $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created);
 
-        $this->created = decbin($createdDatetime->format("U.u") * 10);
+        $this->created = decbin($createdDatetime->format('U.u') * 10);
 
         return $this;
     }
@@ -103,9 +102,9 @@ class ConsentCookieEntity
      */
     public function getLastUpdated()
     {
-        $last_updated_time = \DateTime::createFromFormat("U.u", bindec($this->lastUpdated) / 10);
+        $last_updated_time = \DateTime::createFromFormat('U.u', bindec($this->lastUpdated) / 10);
 
-        return $last_updated_time ? $last_updated_time->format("Y-m-d H:i:s.u") : false;
+        return $last_updated_time ? $last_updated_time->format('Y-m-d H:i:s.u') : false;
     }
 
     /**
@@ -115,9 +114,9 @@ class ConsentCookieEntity
      */
     public function setLastUpdated($lastUpdated)
     {
-        $lastUpdatedDatetime = \Datetime::createFromFormat("Y-m-d H:i:s.u", $lastUpdated);
+        $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated);
 
-        $this->lastUpdated = decbin($lastUpdatedDatetime->format("U.u") * 10);
+        $this->lastUpdated = decbin($lastUpdatedDatetime->format('U.u') * 10);
 
         return $this;
     }
@@ -202,8 +201,8 @@ class ConsentCookieEntity
     public function setConsentLanguage($consentLanguage)
     {
         $alphabet = range('A', 'Z');
-        $first_letter  = zerofill(decbin(array_search($consentLanguage[0], $alphabet)), 6);
-        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet)), 6);
+        $first_letter  = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
+        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
 
         $this->consentLanguage = $first_letter.$second_letter;
 
@@ -245,10 +244,10 @@ class ConsentCookieEntity
      */
     public function setPurposesAllowed($purposesAllowed)
     {
-        $purposesAllowedBits = str_pad("", 24, "0");
+        $purposesAllowedBits = str_pad('', 24, '0');
 
         foreach ($purposesAllowed as $purpose) {
-            $purposesAllowedBits[$purpose - 1] = "1";
+            $purposesAllowedBits[$purpose - 1] = '1';
         }
 
         $this->purposesAllowed = $purposesAllowedBits;
@@ -361,7 +360,11 @@ class ConsentCookieEntity
      */
     public function getRangeEntries()
     {
+        if (! isset($this->rangeEntries)) {
+            return NULL;
+        }
         $range_entries = [];
+
         foreach ($this->rangeEntries as $range_entry) {
             $entry = [];
 
@@ -411,17 +414,17 @@ class ConsentCookieEntity
     public function toArray()
     {
         return [
-            "version"           => $this->getVersion(),
-            "created"           => $this->getCreated(),
-            "lastUpdated"       => $this->getLastUpdated(),
-            "cmpId"             => $this->getCmpId(),
-            "cmpVersion"        => $this->getCmpVersion(),
-            "consentScreen"     => $this->getConsentScreen(),
-            "consentLanguage"   => $this->getConsentLanguage(),
-            "vendorListVersion" => $this->getVendorListVersion(),
-            "purposesAllowed"   => $this->getPurposesAllowed(),
-            "maxVendorId"       => $this->getMaxVendorId(),
-            "encodingType"      => $this->getEncodingType(),
+            'version'           => $this->getVersion(),
+            'created'           => $this->getCreated(),
+            'lastUpdated'       => $this->getLastUpdated(),
+            'cmpId'             => $this->getCmpId(),
+            'cmpVersion'        => $this->getCmpVersion(),
+            'consentScreen'     => $this->getConsentScreen(),
+            'consentLanguage'   => $this->getConsentLanguage(),
+            'vendorListVersion' => $this->getVendorListVersion(),
+            'purposesAllowed'   => $this->getPurposesAllowed(),
+            'maxVendorId'       => $this->getMaxVendorId(),
+            'encodingType'      => $this->getEncodingType(),
         ];
     }
 }
