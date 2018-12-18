@@ -258,9 +258,9 @@ class ConsentCookieTest extends TestCase
 
         $eMes = null;
         try {
-            $consentCookie->setVersion(70);
+            $consentCookie->setVersion(64);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The version be an integer between 0 and 64');
+        $this->assertEquals($eMes, 'The version be an integer between 0 and 63');
 
         $eMes = null;
         try {
@@ -276,27 +276,21 @@ class ConsentCookieTest extends TestCase
 
         $eMes = null;
         try {
-            $consentCookie->setVendorListVersion(65536);
+            $consentCookie->setCmpId(4096);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 65535');
+        $this->assertEquals($eMes, 'The cmpId must be an integer between 0 and 4095');
 
         $eMes = null;
         try {
-            $consentCookie->setCmpId(65536);
+            $consentCookie->setCmpVersion(4096);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The cmpId must be an integer between 0 and 65535');
+        $this->assertEquals($eMes, 'The cmpVersion must be an integer between 0 and 4095');
 
         $eMes = null;
         try {
-            $consentCookie->setCmpVersion(65536);
+            $consentCookie->setConsentScreen(64);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The cmpVersion must be an integer between 0 and 65535');
-
-        $eMes = null;
-        try {
-            $consentCookie->setConsentScreen(65);
-        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 64');
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 63');
 
         $eMes = null;
         try {
@@ -306,15 +300,21 @@ class ConsentCookieTest extends TestCase
 
         $eMes = null;
         try {
+            $consentCookie->setVendorListVersion(4096);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+
+        $eMes = null;
+        try {
             $consentCookie->setPurposesAllowed(array_fill(0, 29, 1));
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
         $this->assertEquals($eMes, 'The purposesAllowed must be an array of maximum 24 values');
 
         $eMes = null;
         try {
-            $consentCookie->setMaxVendorId(65536);
+            $consentCookie->setMaxVendorId(65537);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65535');
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
 
         $eMes = null;
         try {
@@ -330,9 +330,9 @@ class ConsentCookieTest extends TestCase
 
         $eMes = null;
         try {
-            $consentCookie->setNumEntries(65536);
+            $consentCookie->setNumEntries(4096);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The numEntries must be an integer between 0 and 65535');
+        $this->assertEquals($eMes, 'The numEntries must be an integer between 0 and 4095');
     }
 
     public function test_decodeWebSafeString()

@@ -10,6 +10,72 @@ class ConsentCookieEntity
 {
     const EncodingType_BitField  = 0;
     const EncodingType_Range     = 1;
+    const BINARY_CONFIG = [
+        'version'           => [
+            'start'     => 0,
+            'length'    => 6,
+        ],
+        'created'           => [
+            'start'     => 6,
+            'length'    => 36,
+        ],
+        'lastUpdated'       => [
+            'start'     => 42,
+            'length'    => 36,
+        ],
+        'cmpId'             => [
+            'start'     => 78,
+            'length'    => 12,
+        ],
+        'cmpVersion'        => [
+            'start'     => 90,
+            'length'    => 12,
+        ],
+        'consentScreen'     => [
+            'start'     => 102,
+            'length'    => 6,
+        ],
+        'consentLanguage'   => [
+            'start'     => 108,
+            'length'    => 12,
+        ],
+        'vendorListVersion' => [
+            'start'     => 120,
+            'length'    => 12,
+        ],
+        'purposesAllowed'   => [
+            'start'     => 132,
+            'length'    => 24,
+        ],
+        'maxVendorId'       => [
+            'start'     => 156,
+            'length'    => 16,
+        ],
+        'encodingType'      => [
+            'start'     => 172,
+            'length'    => 1,
+        ],
+        'defaultConsent'    => [
+            'start'     => 173,
+            'length'    => 1,
+        ],
+        'bitField'          => [
+            'start'     => 173,
+        ],
+        'numEntries'        => [
+            'start'     => 174,
+            'length'    => 12,
+        ],
+        'rangeEntries'      => [
+            'start'     => 186,
+            'length'    => [
+                'singleOrRange'     => 1,
+                'singleVendorId'    => 16,
+                'startVendorId'     => 16,
+                'endVendorId'       => 16,
+            ]
+        ]
+    ];
 
     /** @var  string $version */
     protected $version;
@@ -73,8 +139,10 @@ class ConsentCookieEntity
      */
     public function setVersion($version)
     {
-        if ($version < 0 || $version > 64) {
-            throw new \ErrorException('The version be an integer between 0 and 64');
+        $maxDec = 2 ** self::BINARY_CONFIG['version']['length']  - 1;
+
+        if ($version < 0 || $version > $maxDec) {
+            throw new \ErrorException('The version be an integer between 0 and '.$maxDec);
         }
 
         $this->version = decbin($version);
@@ -156,8 +224,10 @@ class ConsentCookieEntity
      */
     public function setCmpId($cmpId)
     {
-        if ($cmpId < 0 || $cmpId > 65535) {
-            throw new \ErrorException('The cmpId must be an integer between 0 and 65535');
+        $maxDec = 2 ** self::BINARY_CONFIG['cmpId']['length']  - 1;
+
+        if ($cmpId < 0 || $cmpId > $maxDec) {
+            throw new \ErrorException('The cmpId must be an integer between 0 and '.$maxDec);
         }
 
         $this->cmpId = decbin($cmpId);
@@ -181,8 +251,10 @@ class ConsentCookieEntity
      */
     public function setCmpVersion($cmpVersion)
     {
-        if ($cmpVersion < 0 || $cmpVersion > 65535) {
-            throw new \ErrorException('The cmpVersion must be an integer between 0 and 65535');
+        $maxDec = 2 ** self::BINARY_CONFIG['cmpVersion']['length']  - 1;
+
+        if ($cmpVersion < 0 || $cmpVersion > $maxDec) {
+            throw new \ErrorException('The cmpVersion must be an integer between 0 and '.$maxDec);
         }
 
         $this->cmpVersion = decbin($cmpVersion);
@@ -206,8 +278,10 @@ class ConsentCookieEntity
      */
     public function setConsentScreen($consentScreen)
     {
-        if ($consentScreen < 0 || $consentScreen > 64) {
-            throw new \ErrorException('The consentScreen must be an integer between 0 and 64');
+        $maxDec = 2 ** self::BINARY_CONFIG['consentScreen']['length']  - 1;
+
+        if ($consentScreen < 0 || $consentScreen > $maxDec) {
+            throw new \ErrorException('The consentScreen must be an integer between 0 and '.$maxDec);
         }
 
         $this->consentScreen = decbin($consentScreen);
@@ -263,8 +337,10 @@ class ConsentCookieEntity
      */
     public function setVendorListVersion($vendorListVersion)
     {
-        if ($vendorListVersion < 0 || $vendorListVersion > 65535) {
-            throw new \ErrorException('The consentScreen must be an integer between 0 and 65535');
+        $maxDec = 2 ** self::BINARY_CONFIG['vendorListVersion']['length']  - 1;
+
+        if ($vendorListVersion < 0 || $vendorListVersion > $maxDec) {
+            throw new \ErrorException('The consentScreen must be an integer between 0 and '.$maxDec);
         }
 
         $this->vendorListVersion = decbin($vendorListVersion);
@@ -319,8 +395,10 @@ class ConsentCookieEntity
      */
     public function setMaxVendorId($maxVendorId)
     {
-        if ($maxVendorId < 1 || $maxVendorId > 65535) {
-            throw new \ErrorException('The consentScreen must be an integer between 1 and 65535');
+        $maxDec = 2 ** self::BINARY_CONFIG['maxVendorId']['length'];
+
+        if ($maxVendorId < 1 || $maxVendorId > $maxDec) {
+            throw new \ErrorException('The consentScreen must be an integer between 1 and '.$maxDec);
         }
 
         $this->maxVendorId = decbin($maxVendorId);
@@ -344,7 +422,7 @@ class ConsentCookieEntity
      */
     public function setEncodingType($encodingType)
     {
-        if ($encodingType > 1  || $encodingType < 0) {
+        if ($encodingType < 0 || $encodingType > 1) {
             throw new \ErrorException(
                 'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
         }
@@ -414,8 +492,10 @@ class ConsentCookieEntity
      */
     public function setNumEntries($numEntries)
     {
-        if ($numEntries < 0 || $numEntries > 65535) {
-            throw new \ErrorException('The numEntries must be an integer between 0 and 65535');
+        $maxDec = 2 ** self::BINARY_CONFIG['numEntries']['length'] - 1;
+
+        if ($numEntries < 0 || $numEntries > $maxDec) {
+            throw new \ErrorException('The numEntries must be an integer between 0 and '.$maxDec);
         }
 
         $this->numEntries = decbin($numEntries);
