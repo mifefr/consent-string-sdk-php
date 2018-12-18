@@ -44,20 +44,20 @@ class ConsentCookieTest extends TestCase
 
     public function test_to_string_from_string()
     {
-        $consentCookieString = "BOXhscYOXhscYACABDENAE4AAAAAwQgA";
+        $consentCookieString = 'BOXhscYOXhscYACABDENAE4AAAAAwQgA';
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), "toString value is not valid");
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
     }
 
     public function test_range_entries_to_string_from_string()
     {
-        $consentCookieString = "BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA";
+        $consentCookieString = 'BOXhscYOXhscYACABDENAE4AAAAAyADAALAAcACgAGA';
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), "toString value is not valid");
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
     }
 
     public function test_range_entries_values()
@@ -171,14 +171,14 @@ class ConsentCookieTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $consentCookie = new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAoAA');
+        new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAoAA');
     }
 
     public function test_checkBinaryLength_bitfield_data()
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $consentCookie = new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAAAAAoA');
+        new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAAAAAoA');
     }
 
     public function test_values_from_setters()
@@ -247,6 +247,92 @@ class ConsentCookieTest extends TestCase
                 "Setter $name is not valid"
             );
         }
+    }
+
+    /**
+     * TODO make a test by setter and add different scenario.
+     */
+    public function test_bad_values_from_setters()
+    {
+        $consentCookie = new ConsentCookie;
+
+        $eMes = null;
+        try {
+            $consentCookie->setVersion(64);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The version be an integer between 0 and 63');
+
+        $eMes = null;
+        try {
+            $consentCookie->setCreated('50-31-12');
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The created must be a string with a date at format "Y-m-d H:i:s.u"');
+
+        $eMes = null;
+        try {
+            $consentCookie->setLastUpdated('50-31-11');
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The last updated must be a string with a date at format "Y-m-d H:i:s.u"');
+
+        $eMes = null;
+        try {
+            $consentCookie->setCmpId(4096);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The cmpId must be an integer between 0 and 4095');
+
+        $eMes = null;
+        try {
+            $consentCookie->setCmpVersion(4096);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The cmpVersion must be an integer between 0 and 4095');
+
+        $eMes = null;
+        try {
+            $consentCookie->setConsentScreen(64);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 63');
+
+        $eMes = null;
+        try {
+            $consentCookie->setConsentLanguage('FRA');
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The consentLanguage must be an string of two upper letters');
+
+        $eMes = null;
+        try {
+            $consentCookie->setVendorListVersion(4096);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+
+        $eMes = null;
+        try {
+            $consentCookie->setPurposesAllowed(array_fill(0, 29, 1));
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The purposesAllowed must be an array of maximum 24 values');
+
+        $eMes = null;
+        try {
+            $consentCookie->setMaxVendorId(65537);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
+
+        $eMes = null;
+        try {
+            $consentCookie->setEncodingType(70);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
+
+        $eMes = null;
+        try {
+            $consentCookie->setDefaultConsent('false');
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The defaultConsent must be a boolean');
+
+        $eMes = null;
+        try {
+            $consentCookie->setNumEntries(4096);
+        } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'The numEntries must be an integer between 0 and 4095');
     }
 
     public function test_decodeWebSafeString()
