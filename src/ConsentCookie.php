@@ -74,31 +74,26 @@ class ConsentCookie extends ConsentCookieEntity
      */
     public function getVendorsAllowed()
     {
-        if (! $this->getEncodingType()) {
-            $vendors_allowed = browseAndStoreBitValues($this->getBitField());
-        }
-        else {
+        if ($this->getEncodingType()) {
             $listed_vendors = [];
             $listed_vendors_ranges = [];
 
             foreach ($this->getRangeEntries() as $range_entry) {
-                if (!$range_entry['singleOrRange']) {
-                    $listed_vendors[] = $range_entry['singleVendorId'];
-                }
-                else {
+                if ($range_entry['singleOrRange']) {
                     $listed_vendors_ranges[] = range($range_entry['startVendorId'], $range_entry['endVendorId']);
                 }
+                else {
+                    $listed_vendors[] = $range_entry['singleVendorId'];
+                }
             }
+            $listed_vendors = array_merge($listed_vendors, ...$listed_vendors_ranges);
 
-            if (! empty($listed_vendors_ranges)) {
-                $listed_vendors = array_merge($listed_vendors, ...$listed_vendors_ranges);
-            }
-
-            $vendors_allowed =  ! $this->getDefaultConsent()
-                                ? $listed_vendors
-                                : array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors));
+            return $this->getDefaultConsent()
+                    ? array_values(array_diff(range(1, $this->getMaxVendorId()), $listed_vendors))
+                    : $listed_vendors;
         }
-        return $vendors_allowed;
+
+        return browseAndStoreBitValues($this->getBitField());
     }
 
     /**
