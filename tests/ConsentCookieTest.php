@@ -320,7 +320,7 @@ class ConsentCookieTest extends TestCase
         try {
             $consentCookie->setEncodingType(70);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
+        $this->assertEquals($eMes, 'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::ENCODINGTYPE_BITFIELD or ConsentCookie::ENCODINGTYPE_RANGE');
 
         $eMes = null;
         try {

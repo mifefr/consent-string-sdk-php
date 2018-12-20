@@ -5,7 +5,6 @@ if (!function_exists('str2bin')) {
      * Convert a string to binary
      *
      * @param string $str
-     *
      * @return string $out
      */
     function str2bin($str)
@@ -25,6 +24,13 @@ if (!function_exists('str2bin')) {
 }
 
 if (!function_exists('bin2str')) {
+
+    /**
+     * Convert binary to a string
+     *
+     * @param $binary
+     * @return string
+     */
     function bin2str($binary)
     {
         // 8 bits
@@ -45,7 +51,7 @@ if (!function_exists('bin2str')) {
     }
 }
 
-if (!function_exists('zerofill')){
+if (!function_exists('zerofill')) {
     /**
      * Force and complete a string by zero to respect a length
      *
@@ -59,12 +65,11 @@ if (!function_exists('zerofill')){
     }
 }
 
-if (!function_exists('decodeWebSafeString')){
-    /*
+if (!function_exists('decodeWebSafeString')) {
+    /**
      * Format string to no websafe format
      *
      * @param string $string
-     *
      * @return string
      */
     function decodeWebSafeString($string)
@@ -73,12 +78,11 @@ if (!function_exists('decodeWebSafeString')){
     }
 }
 
-if (!function_exists('encodeWebSafeString')){
-    /*
+if (!function_exists('encodeWebSafeString')) {
+    /**
      * Format string to websafe format
      *
      * @param string $string
-     *
      * @return string
      */
     function encodeWebSafeString($string)
@@ -88,11 +92,10 @@ if (!function_exists('encodeWebSafeString')){
 }
 
 if (!function_exists('browseAndStoreBitValues')) {
-    /*
+    /**
      * Browse and store bit values
      *
      * @param string $bits
-     *
      * @return array
      */
     function browseAndStoreBitValues($bits)

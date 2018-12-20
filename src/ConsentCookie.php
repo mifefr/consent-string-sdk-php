@@ -182,7 +182,6 @@ class ConsentCookie extends ConsentCookieEntity
             else {
                 $entry['startVendorId'] = substr($entries, $current_bit, $lengths['startVendorId']);
                 $current_bit += $lengths['startVendorId'];
-
                 $entry['endVendorId'] = substr($entries, $current_bit, $lengths['endVendorId']);
                 $current_bit += $lengths['endVendorId'];
             }

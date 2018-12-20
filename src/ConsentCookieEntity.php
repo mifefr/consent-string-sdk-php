@@ -2,14 +2,13 @@
 
 namespace Mifefr\ConsentString;
 
-
 /*
  * ConsentCookie Entity
  */
 class ConsentCookieEntity
 {
-    const EncodingType_BitField  = 0;
-    const EncodingType_Range     = 1;
+    const ENCODINGTYPE_BITFIELD = 0;
+    const ENCODINGTYPE_RANGE    = 1;
     const BINARY_CONFIG = [
         'version'           => [
             'start'     => 0,
@@ -424,7 +423,7 @@ class ConsentCookieEntity
     {
         if ($encodingType < 0 || $encodingType > 1) {
             throw new \ErrorException(
-                'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
+                'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::ENCODINGTYPE_BITFIELD or ConsentCookie::ENCODINGTYPE_RANGE');
         }
         $this->encodingType = (string)$encodingType;
 
@@ -509,7 +508,7 @@ class ConsentCookieEntity
     public function getRangeEntries()
     {
         if (! isset($this->rangeEntries)) {
-            return NULL;
+            return null;
         }
         $range_entries = [];
 
@@ -539,7 +538,7 @@ class ConsentCookieEntity
      */
     public function setRangeEntries($rangeEntries)
     {
-        foreach($rangeEntries as $key => $rangeEntry) {
+        foreach ($rangeEntries as $key => $rangeEntry) {
             $rangeEntries[$key]['singleOrRange'] = (string)$rangeEntry['singleOrRange'];
 
             if (! $rangeEntry['singleOrRange']) {
