@@ -141,7 +141,7 @@ class ConsentCookieEntity
         $maxDec = 2 ** self::BINARY_CONFIG['version']['length']  - 1;
 
         if ($version < 0 || $version > $maxDec) {
-            throw new \ErrorException('The version be an integer between 0 and '.$maxDec);
+            throw new \ErrorException('The version must be an integer between 0 and '.$maxDec);
         }
 
         $this->version = decbin($version);
@@ -170,7 +170,7 @@ class ConsentCookieEntity
         $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created);
 
         if (! $createdDatetime) {
-            throw new \ErrorException('The created must be a string with a date at format "Y-m-d H:i:s.u"');
+            throw new \ErrorException('The property created must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
         $this->created = decbin($createdDatetime->format('U.u') * 10);
@@ -199,7 +199,7 @@ class ConsentCookieEntity
         $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated);
 
         if (! $lastUpdatedDatetime) {
-            throw new \ErrorException('The last updated must be a string with a date at format "Y-m-d H:i:s.u"');
+            throw new \ErrorException('The property last updated must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
         $this->lastUpdated = decbin($lastUpdatedDatetime->format('U.u') * 10);
