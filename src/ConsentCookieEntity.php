@@ -2,14 +2,13 @@
 
 namespace Mifefr\ConsentString;
 
-
 /*
  * ConsentCookie Entity
  */
 class ConsentCookieEntity
 {
-    const EncodingType_BitField  = 0;
-    const EncodingType_Range     = 1;
+    const ENCODINGTYPE_BITFIELD = 0;
+    const ENCODINGTYPE_RANGE    = 1;
     const BINARY_CONFIG = [
         'version'           => [
             'start'     => 0,
@@ -142,7 +141,7 @@ class ConsentCookieEntity
         $maxDec = 2 ** self::BINARY_CONFIG['version']['length']  - 1;
 
         if ($version < 0 || $version > $maxDec) {
-            throw new \ErrorException('The version be an integer between 0 and '.$maxDec);
+            throw new \ErrorException('The version must be an integer between 0 and '.$maxDec);
         }
 
         $this->version = decbin($version);
@@ -171,7 +170,7 @@ class ConsentCookieEntity
         $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created);
 
         if (! $createdDatetime) {
-            throw new \ErrorException('The created must be a string with a date at format "Y-m-d H:i:s.u"');
+            throw new \ErrorException('The property created must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
         $this->created = decbin($createdDatetime->format('U.u') * 10);
@@ -200,7 +199,7 @@ class ConsentCookieEntity
         $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated);
 
         if (! $lastUpdatedDatetime) {
-            throw new \ErrorException('The last updated must be a string with a date at format "Y-m-d H:i:s.u"');
+            throw new \ErrorException('The property last updated must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
         $this->lastUpdated = decbin($lastUpdatedDatetime->format('U.u') * 10);
@@ -424,7 +423,7 @@ class ConsentCookieEntity
     {
         if ($encodingType < 0 || $encodingType > 1) {
             throw new \ErrorException(
-                'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::EncodingType_BitField or ConsentCookie::EncodingType_Range');
+                'The encodingType must be an integer (0 or 1) , you can use constants:  ConsentCookie::ENCODINGTYPE_BITFIELD or ConsentCookie::ENCODINGTYPE_RANGE');
         }
         $this->encodingType = (string)$encodingType;
 
@@ -509,7 +508,7 @@ class ConsentCookieEntity
     public function getRangeEntries()
     {
         if (! isset($this->rangeEntries)) {
-            return NULL;
+            return null;
         }
         $range_entries = [];
 
@@ -539,7 +538,7 @@ class ConsentCookieEntity
      */
     public function setRangeEntries($rangeEntries)
     {
-        foreach($rangeEntries as $key => $rangeEntry) {
+        foreach ($rangeEntries as $key => $rangeEntry) {
             $rangeEntries[$key]['singleOrRange'] = (string)$rangeEntry['singleOrRange'];
 
             if (! $rangeEntry['singleOrRange']) {
