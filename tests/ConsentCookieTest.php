@@ -456,7 +456,7 @@ class ConsentCookieTest extends TestCase
         $this->assertEquals(
             $consentCookie->toBase64(),
             $consentCookieCopy->toBase64(),
-            "The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value"
+            'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
         );
     }
 
@@ -469,7 +469,7 @@ class ConsentCookieTest extends TestCase
         $this->assertEquals(
             $consentCookie->toBase64(),
             $consentCookieCopy->toBase64(),
-            "The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value"
+            'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
         );
     }
 }

@@ -470,7 +470,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The defaultConsent must be a boolean');
         }
 
-        $this->defaultConsent = $defaultConsent ? "1" : "0";
+        $this->defaultConsent = $defaultConsent ? '1' : '0';
 
         return $this;
     }

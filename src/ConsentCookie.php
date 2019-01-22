@@ -262,17 +262,15 @@ class ConsentCookie extends ConsentCookieEntity
             ->setEncodingType($this->getEncodingType())
         ;
 
-        if (!$this->getEncodingType()) {
-            $consent_cookie_copy->setBitField($this->getBitField());
+        if (! $this->getEncodingType()) {
+            return $consent_cookie_copy->setBitField($this->getBitField());
         }
         else {
-            $consent_cookie_copy
+            return $consent_cookie_copy
                 ->setDefaultConsent($this->getDefaultConsent())
                 ->setNumEntries($this->getNumEntries())
                 ->setRangeEntries($this->getRangeEntries())
             ;
         }
-
-        return $consent_cookie_copy;
     }
 }
