@@ -250,7 +250,7 @@ class ConsentCookieTest extends TestCase
         foreach ($values as $name => $value) {
             $this->assertEquals(
                 $value,
-                $consentCookie->{"get$name"}($value),
+                $consentCookie->{"get$name"}(),
                 "Setter $name is not valid"
             );
         }
@@ -445,5 +445,64 @@ class ConsentCookieTest extends TestCase
             $consentCookie->setNumEntries(-1);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
         $this->assertEquals($eMes, 'The numEntries must be an integer between 0 and 4095');
+    }
+
+    public function test_setters_by_copy_bit_field()
+    {
+        $consentCookie = new ConsentCookie('BOXhscYOXhscYACABDENAE4AAAAAwQgA');
+
+        $consentCookieCopy = new ConsentCookie();
+
+        $consentCookieCopy
+            ->setVersion($consentCookie->getVersion())
+            ->setCreated($consentCookie->getCreated())
+            ->setLastUpdated($consentCookie->getLastUpdated())
+            ->setCmpId($consentCookie->getCmpId())
+            ->setCmpVersion($consentCookie->getCmpVersion())
+            ->setConsentScreen($consentCookie->getConsentScreen())
+            ->setConsentLanguage($consentCookie->getConsentLanguage())
+            ->setVendorListVersion($consentCookie->getVendorListVersion())
+            ->setMaxVendorId($consentCookie->getMaxVendorId())
+            ->setBitField($consentCookie->getBitField())
+            ->setPurposesAllowed($consentCookie->getPurposesAllowed())
+            ->setEncodingType($consentCookie->getEncodingType())
+        ;
+
+        $this->assertEquals(
+            $consentCookie->toBase64(),
+            $consentCookieCopy->toBase64(),
+            "The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value"
+        );
+    }
+
+    public function test_setters_by_copy_range_selection()
+    {
+        $consentCookie = new ConsentCookie('BOayEvPOayEvPAAABAENAAAAAAAArACAAHAAQABQ');
+
+        $consentCookieCopy = new ConsentCookie();
+
+        $consentCookieCopy
+            ->setVersion($consentCookie->getVersion())
+            ->setCreated($consentCookie->getCreated())
+            ->setLastUpdated($consentCookie->getLastUpdated())
+            ->setCmpId($consentCookie->getCmpId())
+            ->setCmpVersion($consentCookie->getCmpVersion())
+            ->setConsentScreen($consentCookie->getConsentScreen())
+            ->setConsentLanguage($consentCookie->getConsentLanguage())
+            ->setVendorListVersion($consentCookie->getVendorListVersion())
+            ->setMaxVendorId($consentCookie->getMaxVendorId())
+            ->setBitField($consentCookie->getBitField())
+            ->setPurposesAllowed($consentCookie->getPurposesAllowed())
+            ->setEncodingType($consentCookie->getEncodingType())
+            ->setDefaultConsent($consentCookie->getDefaultConsent())
+            ->setNumEntries($consentCookie->getNumEntries())
+            ->setRangeEntries($consentCookie->getRangeEntries())
+        ;
+
+        $this->assertEquals(
+            $consentCookie->toBase64(),
+            $consentCookieCopy->toBase64(),
+            "The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value"
+        );
     }
 }
