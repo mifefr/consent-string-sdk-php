@@ -267,9 +267,9 @@ class ConsentCookie extends ConsentCookieEntity
         }
 
         return $consent_cookie_copy
-                ->setDefaultConsent($this->getDefaultConsent())
-                ->setNumEntries($this->getNumEntries())
-                ->setRangeEntries($this->getRangeEntries())
-            ;
+            ->setDefaultConsent($this->getDefaultConsent())
+            ->setNumEntries($this->getNumEntries())
+            ->setRangeEntries($this->getRangeEntries())
+        ;
     }
 }
