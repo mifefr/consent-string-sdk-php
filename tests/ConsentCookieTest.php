@@ -48,7 +48,7 @@ class ConsentCookieTest extends TestCase
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toBase64 value is not valid');
     }
 
     public function test_range_entries_to_string_from_string()
@@ -57,7 +57,7 @@ class ConsentCookieTest extends TestCase
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toBase64 value is not valid');
     }
 
     public function test_range_entries_values()
