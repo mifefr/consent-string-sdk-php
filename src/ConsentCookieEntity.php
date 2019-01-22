@@ -497,7 +497,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The numEntries must be an integer between 0 and '.$maxDec);
         }
 
-        $this->numEntries = decbin($numEntries);
+        $this->numEntries = zerofill(decbin($numEntries), self::BINARY_CONFIG['numEntries']['length']);
 
         return $this;
     }
@@ -538,15 +538,17 @@ class ConsentCookieEntity
      */
     public function setRangeEntries($rangeEntries)
     {
+        $lengths = self::BINARY_CONFIG['rangeEntries']['length'];
+
         foreach ($rangeEntries as $key => $rangeEntry) {
             $rangeEntries[$key]['singleOrRange'] = (string)$rangeEntry['singleOrRange'];
 
             if (! $rangeEntry['singleOrRange']) {
-                $rangeEntries[$key]['singleVendorId'] = zerofill(decbin($rangeEntry['singleVendorId']), 12);
+                $rangeEntries[$key]['singleVendorId'] = zerofill(decbin($rangeEntry['singleVendorId']), $lengths['singleVendorId']);
             }
             else {
-                $rangeEntries[$key]['startVendorId'] = zerofill(decbin($rangeEntry['startVendorId']), 12);
-                $rangeEntries[$key]['endVendorId'] = zerofill(decbin($rangeEntry['endVendorId']), 12);
+                $rangeEntries[$key]['startVendorId'] = zerofill(decbin($rangeEntry['startVendorId']), $lengths['startVendorId']);
+                $rangeEntries[$key]['endVendorId'] = zerofill(decbin($rangeEntry['endVendorId']), $lengths['endVendorId']);
             }
         }
 
