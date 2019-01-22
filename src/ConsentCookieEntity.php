@@ -144,7 +144,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The version must be an integer between 0 and '.$maxDec);
         }
 
-        $this->version = decbin($version);
+        $this->version = zerofill(decbin($version), self::BINARY_CONFIG['version']['length']);
 
         return $this;
     }
@@ -173,7 +173,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The property created must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
-        $this->created = decbin($createdDatetime->format('U.u') * 10);
+        $this->created = zerofill(decbin($createdDatetime->format('U.u') * 10), self::BINARY_CONFIG['created']['length']);
 
         return $this;
     }
@@ -202,7 +202,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The property last updated must be a string with a date at format "Y-m-d H:i:s.u"');
         }
 
-        $this->lastUpdated = decbin($lastUpdatedDatetime->format('U.u') * 10);
+        $this->lastUpdated = zerofill(decbin($lastUpdatedDatetime->format('U.u') * 10), self::BINARY_CONFIG['lastUpdated']['length']);
 
         return $this;
     }
@@ -229,7 +229,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The cmpId must be an integer between 0 and '.$maxDec);
         }
 
-        $this->cmpId = decbin($cmpId);
+        $this->cmpId = zerofill(decbin($cmpId), self::BINARY_CONFIG['cmpId']['length']);
 
         return $this;
     }
@@ -256,7 +256,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The cmpVersion must be an integer between 0 and '.$maxDec);
         }
 
-        $this->cmpVersion = decbin($cmpVersion);
+        $this->cmpVersion = zerofill(decbin($cmpVersion), self::BINARY_CONFIG['cmpVersion']['length']);
 
         return $this;
     }
@@ -283,7 +283,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The consentScreen must be an integer between 0 and '.$maxDec);
         }
 
-        $this->consentScreen = decbin($consentScreen);
+        $this->consentScreen = zerofill(decbin($consentScreen), self::BINARY_CONFIG['consentScreen']['length']);
 
         return $this;
     }
@@ -294,8 +294,8 @@ class ConsentCookieEntity
     public function getConsentLanguage()
     {
         $alphabet = range('A', 'Z');
-        $first_letter = bindec(substr($this->consentLanguage, 0, 6));
-        $second_letter = bindec(substr($this->consentLanguage, 6, 12));
+        $first_letter = bindec(substr($this->consentLanguage, 0, self::BINARY_CONFIG['consentLanguage']['length'] / 2));
+        $second_letter = bindec(substr($this->consentLanguage, 6, self::BINARY_CONFIG['consentLanguage']['length'] / 2));
 
         return $alphabet[$first_letter].$alphabet[$second_letter];
     }
@@ -312,8 +312,8 @@ class ConsentCookieEntity
             throw new \ErrorException('The consentLanguage must be an string of two upper letters');
         }
         $alphabet = range('A', 'Z');
-        $first_letter = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), 6);
-        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), 6);
+        $first_letter = zerofill(decbin(array_search($consentLanguage[0], $alphabet, true)), self::BINARY_CONFIG['consentLanguage']['length'] / 2);
+        $second_letter = zerofill(decbin(array_search($consentLanguage[1], $alphabet, true)), self::BINARY_CONFIG['consentLanguage']['length'] / 2);
 
         $this->consentLanguage = $first_letter.$second_letter;
 
@@ -342,7 +342,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The consentScreen must be an integer between 0 and '.$maxDec);
         }
 
-        $this->vendorListVersion = decbin($vendorListVersion);
+        $this->vendorListVersion = zerofill(decbin($vendorListVersion), self::BINARY_CONFIG['vendorListVersion']['length']);
 
         return $this;
     }
@@ -363,11 +363,11 @@ class ConsentCookieEntity
      */
     public function setPurposesAllowed($purposesAllowed)
     {
-        if (! is_array($purposesAllowed) || count($purposesAllowed) > 24) {
+        if (! is_array($purposesAllowed) || count($purposesAllowed) > self::BINARY_CONFIG['purposesAllowed']['length']) {
             throw new \ErrorException('The purposesAllowed must be an array of maximum 24 values');
         }
 
-        $purposesAllowedBits = str_pad('', 24, '0');
+        $purposesAllowedBits = str_pad('', self::BINARY_CONFIG['purposesAllowed']['length'], '0');
 
         foreach ($purposesAllowed as $purpose) {
             $purposesAllowedBits[$purpose - 1] = '1';
@@ -400,7 +400,7 @@ class ConsentCookieEntity
             throw new \ErrorException('The consentScreen must be an integer between 1 and '.$maxDec);
         }
 
-        $this->maxVendorId = decbin($maxVendorId);
+        $this->maxVendorId = zerofill(decbin($maxVendorId), self::BINARY_CONFIG['maxVendorId']['length']);
 
         return $this;
     }
