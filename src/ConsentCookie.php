@@ -198,11 +198,13 @@ class ConsentCookie extends ConsentCookieEntity
     {
         $binary = '';
 
-        foreach($this->rangeEntries as $rangeEntry) {
-            $binary .= $rangeEntry['singleOrRange'];
-            $binary .= isset($rangeEntry['singleVendorId'])
-                    ? $rangeEntry['singleVendorId']
-                    : $rangeEntry['startVendorId'].$rangeEntry['endVendorId'];
+        if (is_array($this->rangeEntries)) {
+            foreach ($this->rangeEntries as $rangeEntry) {
+                $binary .= $rangeEntry['singleOrRange'];
+                $binary .= isset($rangeEntry['singleVendorId'])
+                        ? $rangeEntry['singleVendorId']
+                        : $rangeEntry['startVendorId'].$rangeEntry['endVendorId'];
+            }
         }
 
         return $binary;
