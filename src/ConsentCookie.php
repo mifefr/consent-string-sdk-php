@@ -241,4 +241,38 @@ class ConsentCookie extends ConsentCookieEntity
 
         return false;
     }
+
+    /**
+     * @return ConsentCookie
+     */
+    public function copy() {
+        $consent_cookie_copy = new ConsentCookie();
+
+        $consent_cookie_copy
+            ->setVersion($this->getVersion())
+            ->setCreated($this->getCreated())
+            ->setLastUpdated($this->getLastUpdated())
+            ->setCmpId($this->getCmpId())
+            ->setCmpVersion($this->getCmpVersion())
+            ->setConsentScreen($this->getConsentScreen())
+            ->setConsentLanguage($this->getConsentLanguage())
+            ->setVendorListVersion($this->getVendorListVersion())
+            ->setMaxVendorId($this->getMaxVendorId())
+            ->setPurposesAllowed($this->getPurposesAllowed())
+            ->setEncodingType($this->getEncodingType())
+        ;
+
+        if (!$this->getEncodingType()) {
+            $consent_cookie_copy->setBitField($this->getBitField());
+        }
+        else {
+            $consent_cookie_copy
+                ->setDefaultConsent($this->getDefaultConsent())
+                ->setNumEntries($this->getNumEntries())
+                ->setRangeEntries($this->getRangeEntries())
+            ;
+        }
+
+        return $consent_cookie_copy;
+    }
 }

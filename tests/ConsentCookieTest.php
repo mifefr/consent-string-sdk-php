@@ -451,22 +451,7 @@ class ConsentCookieTest extends TestCase
     {
         $consentCookie = new ConsentCookie('BOXhscYOXhscYACABDENAE4AAAAAwQgA');
 
-        $consentCookieCopy = new ConsentCookie();
-
-        $consentCookieCopy
-            ->setVersion($consentCookie->getVersion())
-            ->setCreated($consentCookie->getCreated())
-            ->setLastUpdated($consentCookie->getLastUpdated())
-            ->setCmpId($consentCookie->getCmpId())
-            ->setCmpVersion($consentCookie->getCmpVersion())
-            ->setConsentScreen($consentCookie->getConsentScreen())
-            ->setConsentLanguage($consentCookie->getConsentLanguage())
-            ->setVendorListVersion($consentCookie->getVendorListVersion())
-            ->setMaxVendorId($consentCookie->getMaxVendorId())
-            ->setBitField($consentCookie->getBitField())
-            ->setPurposesAllowed($consentCookie->getPurposesAllowed())
-            ->setEncodingType($consentCookie->getEncodingType())
-        ;
+        $consentCookieCopy = $consentCookie->copy();
 
         $this->assertEquals(
             $consentCookie->toBase64(),
@@ -479,25 +464,7 @@ class ConsentCookieTest extends TestCase
     {
         $consentCookie = new ConsentCookie('BOayEvPOayEvPAAABAENAAAAAAAArACAAHAAQABQ');
 
-        $consentCookieCopy = new ConsentCookie();
-
-        $consentCookieCopy
-            ->setVersion($consentCookie->getVersion())
-            ->setCreated($consentCookie->getCreated())
-            ->setLastUpdated($consentCookie->getLastUpdated())
-            ->setCmpId($consentCookie->getCmpId())
-            ->setCmpVersion($consentCookie->getCmpVersion())
-            ->setConsentScreen($consentCookie->getConsentScreen())
-            ->setConsentLanguage($consentCookie->getConsentLanguage())
-            ->setVendorListVersion($consentCookie->getVendorListVersion())
-            ->setMaxVendorId($consentCookie->getMaxVendorId())
-            ->setBitField($consentCookie->getBitField())
-            ->setPurposesAllowed($consentCookie->getPurposesAllowed())
-            ->setEncodingType($consentCookie->getEncodingType())
-            ->setDefaultConsent($consentCookie->getDefaultConsent())
-            ->setNumEntries($consentCookie->getNumEntries())
-            ->setRangeEntries($consentCookie->getRangeEntries())
-        ;
+        $consentCookieCopy = $consentCookie->copy();
 
         $this->assertEquals(
             $consentCookie->toBase64(),
