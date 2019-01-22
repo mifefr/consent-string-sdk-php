@@ -154,7 +154,7 @@ class ConsentCookieEntity
      */
     public function getCreated()
     {
-        $created_time = \DateTime::createFromFormat('U.u', bindec($this->created)/10);
+        $created_time = \DateTime::createFromFormat('U.u', bindec($this->created)/10, new \DateTimeZone('UTC'));
 
         return $created_time ? $created_time->format('Y-m-d H:i:s.u') : false;
     }
@@ -167,7 +167,7 @@ class ConsentCookieEntity
      */
     public function setCreated($created)
     {
-        $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created);
+        $createdDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $created, new \DateTimeZone('UTC'));
 
         if (! $createdDatetime) {
             throw new \ErrorException('The property created must be a string with a date at format "Y-m-d H:i:s.u"');
@@ -183,7 +183,7 @@ class ConsentCookieEntity
      */
     public function getLastUpdated()
     {
-        $last_updated_time = \DateTime::createFromFormat('U.u', bindec($this->lastUpdated) / 10);
+        $last_updated_time = \DateTime::createFromFormat('U.u', bindec($this->lastUpdated) / 10, new \DateTimeZone('UTC'));
 
         return $last_updated_time ? $last_updated_time->format('Y-m-d H:i:s.u') : false;
     }
@@ -196,7 +196,7 @@ class ConsentCookieEntity
      */
     public function setLastUpdated($lastUpdated)
     {
-        $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated);
+        $lastUpdatedDatetime = \Datetime::createFromFormat('Y-m-d H:i:s.u', $lastUpdated, new \DateTimeZone('UTC'));
 
         if (! $lastUpdatedDatetime) {
             throw new \ErrorException('The property last updated must be a string with a date at format "Y-m-d H:i:s.u"');
