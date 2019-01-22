@@ -48,7 +48,7 @@ class ConsentCookieTest extends TestCase
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toBase64 value is not valid');
     }
 
     public function test_range_entries_to_string_from_string()
@@ -57,7 +57,7 @@ class ConsentCookieTest extends TestCase
 
         $consentCookie = new ConsentCookie($consentCookieString);
 
-        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toString value is not valid');
+        $this->assertEquals($consentCookieString, $consentCookie->toBase64(), 'toBase64 value is not valid');
     }
 
     public function test_range_entries_values()
@@ -250,7 +250,7 @@ class ConsentCookieTest extends TestCase
         foreach ($values as $name => $value) {
             $this->assertEquals(
                 $value,
-                $consentCookie->{"get$name"}($value),
+                $consentCookie->{"get$name"}(),
                 "Setter $name is not valid"
             );
         }
@@ -445,5 +445,31 @@ class ConsentCookieTest extends TestCase
             $consentCookie->setNumEntries(-1);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
         $this->assertEquals($eMes, 'The numEntries must be an integer between 0 and 4095');
+    }
+
+    public function test_setters_by_copy_bit_field()
+    {
+        $consentCookie = new ConsentCookie('BOXhscYOXhscYACABDENAE4AAAAAwQgA');
+
+        $consentCookieCopy = $consentCookie->copy();
+
+        $this->assertEquals(
+            $consentCookie->toBase64(),
+            $consentCookieCopy->toBase64(),
+            'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
+        );
+    }
+
+    public function test_setters_by_copy_range_selection()
+    {
+        $consentCookie = new ConsentCookie('BOayEvPOayEvPAAABAENAAAAAAAArACAAHAAQABQ');
+
+        $consentCookieCopy = $consentCookie->copy();
+
+        $this->assertEquals(
+            $consentCookie->toBase64(),
+            $consentCookieCopy->toBase64(),
+            'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
+        );
     }
 }
