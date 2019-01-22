@@ -59,9 +59,15 @@ class ConsentCookie extends ConsentCookieEntity
             $consent_cookie .= $this->bitField;
         }
         else {
+            $range_entries = $this->getBinaryRangeEntries();
+
+            if (empty($range_entries)) {
+                throw new \Exception('Trying to get the base64 cookie string with no range entries but with encoding type at 1');
+            }
+
             $consent_cookie .= $this->defaultConsent
                             . $this->numEntries
-                            . $this->getBinaryRangeEntries();
+                            . $range_entries;
         }
 
         $base64 = encodeWebSafeString(base64_encode(bin2str($consent_cookie)));

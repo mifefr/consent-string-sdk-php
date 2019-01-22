@@ -472,4 +472,40 @@ class ConsentCookieTest extends TestCase
             'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
         );
     }
+
+    public function test_toBase64_error()
+    {
+        $consentCookie = new ConsentCookie;
+
+        $values =
+        [
+            'Version'           => 1,
+            'Created'           => '2018-11-20 10:23:49.600000',
+            'LastUpdated'       => '2018-11-20 10:23:49.600000',
+            'CmpId'             => 2,
+            'CmpVersion'        => 1,
+            'ConsentScreen'     => 3,
+            'ConsentLanguage'   => 'EN',
+            'VendorListVersion' => 4,
+            'PurposesAllowed'   => [
+                1, 2, 3
+            ],
+            'MaxVendorId'       => 12,
+            'EncodingType'      => 1,
+            'BitField'          => '001000010000',
+            'NumEntries'        => 1,
+            'DefaultConsent'    => true
+        ];
+
+        // Setter
+        foreach ($values as $name => $value) {
+            $consentCookie->{"set$name"}($value);
+        }
+
+        $eMes = null;
+        try {
+            $consentCookie->toBase64();
+        } catch (\Exception $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'Trying to get the base64 cookie string with no range entries but with encoding type at 1');
+    }
 }
