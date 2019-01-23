@@ -371,13 +371,13 @@ class ConsentCookieTest extends TestCase
         try {
             $consentCookie->setVendorListVersion(4096);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+        $this->assertEquals($eMes, 'The vendorListVersion must be an integer between 0 and 4095');
 
         $eMes = null;
         try {
             $consentCookie->setVendorListVersion(-1);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+        $this->assertEquals($eMes, 'The vendorListVersion must be an integer between 0 and 4095');
     }
 
     public function test_setPurposesAllowed_bad_values()
@@ -399,13 +399,13 @@ class ConsentCookieTest extends TestCase
         try {
             $consentCookie->setMaxVendorId(65537);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
+        $this->assertEquals($eMes, 'The maxVendorId must be an integer between 1 and 65536');
 
         $eMes = null;
         try {
             $consentCookie->setMaxVendorId(0);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
+        $this->assertEquals($eMes, 'The maxVendorId must be an integer between 1 and 65536');
     }
 
     public function test_setEncodingType_bad_values()
@@ -473,34 +473,23 @@ class ConsentCookieTest extends TestCase
         );
     }
 
-    public function test_toBase64_error()
+    public function test_toBase64__range_entries_error()
     {
         $consentCookie = new ConsentCookie;
 
-        $values =
-        [
-            'Version'           => 1,
-            'Created'           => '2018-11-20 10:23:49.600000',
-            'LastUpdated'       => '2018-11-20 10:23:49.600000',
-            'CmpId'             => 2,
-            'CmpVersion'        => 1,
-            'ConsentScreen'     => 3,
-            'ConsentLanguage'   => 'EN',
-            'VendorListVersion' => 4,
-            'PurposesAllowed'   => [
-                1, 2, 3
-            ],
-            'MaxVendorId'       => 12,
-            'EncodingType'      => 1,
-            'BitField'          => '001000010000',
-            'NumEntries'        => 1,
-            'DefaultConsent'    => true
-        ];
-
-        // Setter
-        foreach ($values as $name => $value) {
-            $consentCookie->{"set$name"}($value);
-        }
+        $consentCookie
+            ->setVersion(1)
+            ->setCreated('2018-11-20 10:23:49.600000')
+            ->setLastUpdated('2018-11-20 10:23:49.600000')
+            ->setCmpId(2)
+            ->setCmpVersion(3)
+            ->setConsentScreen(4)
+            ->setConsentLanguage('EN')
+            ->setVendorListVersion(5)
+            ->setMaxVendorId(6)
+            ->setPurposesAllowed([1, 2, 3])
+            ->setEncodingType(1)
+            ;
 
         $eMes = null;
         try {
