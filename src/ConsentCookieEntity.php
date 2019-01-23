@@ -339,7 +339,7 @@ class ConsentCookieEntity
         $maxDec = 2 ** self::BINARY_CONFIG['vendorListVersion']['length']  - 1;
 
         if ($vendorListVersion < 0 || $vendorListVersion > $maxDec) {
-            throw new \ErrorException('The consentScreen must be an integer between 0 and '.$maxDec);
+            throw new \ErrorException('The vendorListVersion must be an integer between 0 and '.$maxDec);
         }
 
         $this->vendorListVersion = zerofill(decbin($vendorListVersion), self::BINARY_CONFIG['vendorListVersion']['length']);
@@ -397,7 +397,7 @@ class ConsentCookieEntity
         $maxDec = 2 ** self::BINARY_CONFIG['maxVendorId']['length'];
 
         if ($maxVendorId < 1 || $maxVendorId > $maxDec) {
-            throw new \ErrorException('The consentScreen must be an integer between 1 and '.$maxDec);
+            throw new \ErrorException('The maxVendorId must be an integer between 1 and '.$maxDec);
         }
 
         $this->maxVendorId = zerofill(decbin($maxVendorId), self::BINARY_CONFIG['maxVendorId']['length']);

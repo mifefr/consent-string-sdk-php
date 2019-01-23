@@ -371,13 +371,13 @@ class ConsentCookieTest extends TestCase
         try {
             $consentCookie->setVendorListVersion(4096);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+        $this->assertEquals($eMes, 'The vendorListVersion must be an integer between 0 and 4095');
 
         $eMes = null;
         try {
             $consentCookie->setVendorListVersion(-1);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 0 and 4095');
+        $this->assertEquals($eMes, 'The vendorListVersion must be an integer between 0 and 4095');
     }
 
     public function test_setPurposesAllowed_bad_values()
@@ -399,13 +399,13 @@ class ConsentCookieTest extends TestCase
         try {
             $consentCookie->setMaxVendorId(65537);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
+        $this->assertEquals($eMes, 'The maxVendorId must be an integer between 1 and 65536');
 
         $eMes = null;
         try {
             $consentCookie->setMaxVendorId(0);
         } catch (\ErrorException $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'The consentScreen must be an integer between 1 and 65536');
+        $this->assertEquals($eMes, 'The maxVendorId must be an integer between 1 and 65536');
     }
 
     public function test_setEncodingType_bad_values()
@@ -471,5 +471,32 @@ class ConsentCookieTest extends TestCase
             $consentCookieCopy->toBase64(),
             'The base 64 cookies do not match, this probably means on setter does not handle the bit length of the value'
         );
+    }
+
+    public function test_toBase64_range_entries_error()
+    {
+        $consentCookie = new ConsentCookie;
+
+        $consentCookie
+            ->setVersion(1)
+            ->setCreated('2018-11-20 10:23:49.600000')
+            ->setLastUpdated('2018-11-20 10:23:49.600000')
+            ->setCmpId(2)
+            ->setCmpVersion(3)
+            ->setConsentScreen(4)
+            ->setConsentLanguage('EN')
+            ->setVendorListVersion(5)
+            ->setMaxVendorId(6)
+            ->setPurposesAllowed([1, 2, 3])
+            ->setEncodingType(1)
+            ->setDefaultConsent(false)
+            ->setNumEntries(1)
+            ;
+
+        $eMes = null;
+        try {
+            $consentCookie->toBase64();
+        } catch (\Exception $e) { $eMes = $e->getMessage(); }
+        $this->assertEquals($eMes, 'Trying to get the base64 cookie string with no range entries but with encoding type at 1 and num entries above 0');
     }
 }

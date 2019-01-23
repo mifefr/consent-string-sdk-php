@@ -59,9 +59,15 @@ class ConsentCookie extends ConsentCookieEntity
             $consent_cookie .= $this->bitField;
         }
         else {
+            $range_entries = $this->getBinaryRangeEntries();
+
+            if (bindec($this->numEntries) > 0 && empty($range_entries)) {
+                throw new \Exception('Trying to get the base64 cookie string with no range entries but with encoding type at 1 and num entries above 0');
+            }
+
             $consent_cookie .= $this->defaultConsent
                             . $this->numEntries
-                            . $this->getBinaryRangeEntries();
+                            . $range_entries;
         }
 
         $base64 = encodeWebSafeString(base64_encode(bin2str($consent_cookie)));
@@ -198,11 +204,13 @@ class ConsentCookie extends ConsentCookieEntity
     {
         $binary = '';
 
-        foreach($this->rangeEntries as $rangeEntry) {
-            $binary .= $rangeEntry['singleOrRange'];
-            $binary .= isset($rangeEntry['singleVendorId'])
-                    ? $rangeEntry['singleVendorId']
-                    : $rangeEntry['startVendorId'].$rangeEntry['endVendorId'];
+        if (is_array($this->rangeEntries)) {
+            foreach ($this->rangeEntries as $rangeEntry) {
+                $binary .= $rangeEntry['singleOrRange'];
+                $binary .= isset($rangeEntry['singleVendorId'])
+                        ? $rangeEntry['singleVendorId']
+                        : $rangeEntry['startVendorId'].$rangeEntry['endVendorId'];
+            }
         }
 
         return $binary;
