@@ -489,6 +489,7 @@ class ConsentCookieTest extends TestCase
             ->setMaxVendorId(6)
             ->setPurposesAllowed([1, 2, 3])
             ->setEncodingType(1)
+            ->setDefaultConsent(false)
             ->setNumEntries(1)
             ;
 

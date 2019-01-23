@@ -61,7 +61,7 @@ class ConsentCookie extends ConsentCookieEntity
         else {
             $range_entries = $this->getBinaryRangeEntries();
 
-            if (!empty($this->numEntries) && empty($range_entries)) {
+            if (bindec($this->numEntries) > 0 && empty($range_entries)) {
                 throw new \Exception('Trying to get the base64 cookie string with no range entries but with encoding type at 1 and num entries above 0');
             }
 
