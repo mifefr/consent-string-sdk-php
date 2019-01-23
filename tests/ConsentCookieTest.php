@@ -473,7 +473,7 @@ class ConsentCookieTest extends TestCase
         );
     }
 
-    public function test_toBase64__range_entries_error()
+    public function test_toBase64_range_entries_error()
     {
         $consentCookie = new ConsentCookie;
 
@@ -489,12 +489,13 @@ class ConsentCookieTest extends TestCase
             ->setMaxVendorId(6)
             ->setPurposesAllowed([1, 2, 3])
             ->setEncodingType(1)
+            ->setNumEntries(1)
             ;
 
         $eMes = null;
         try {
             $consentCookie->toBase64();
         } catch (\Exception $e) { $eMes = $e->getMessage(); }
-        $this->assertEquals($eMes, 'Trying to get the base64 cookie string with no range entries but with encoding type at 1');
+        $this->assertEquals($eMes, 'Trying to get the base64 cookie string with no range entries but with encoding type at 1 and num entries above 0');
     }
 }
