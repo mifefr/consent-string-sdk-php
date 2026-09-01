@@ -181,6 +181,32 @@ class ConsentCookieTest extends TestCase
         new ConsentCookie('BOXiPiyOXiPiyAAABAENAAAAAAAAoA');
     }
 
+    public function test_checkSupportedVersion_rejects_tcf_v2_core_string()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported consent string version 2');
+
+        // TCF v2 core segment: purposes 1-3, maxVendorId 10, vendors 3 and 8.
+        // Decoded as v1 it silently yielded purposes [4,6,7,21,22,23] and no vendor.
+        new ConsentCookie('CQXEyXAQXEyXAAHABDENBkFgAOAAAAAAAAqIAFCE');
+    }
+
+    public function test_checkSupportedVersion_rejects_tcf_v2_multi_segment_string()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported consent string version 2');
+
+        // core.disclosedVendors, the two segments required since TCF v2.3
+        new ConsentCookie('CQXEyXAQXEyXAAHABDENBkFgAOAAAAAAAAqIAFCE.IFoEUQQgAIQwgIwQABAEAAAAOIAACAIAAAAQAIAgEAACEAAAAAgAQBAAAAAAAGBAAgAAAAAAAFAAECAAAgAAQARAEQAAAAAJAAIAAgAAAYQEAAAQmAgBC3ZAYzUw');
+    }
+
+    public function test_checkSupportedVersion_accepts_v1_string()
+    {
+        $consentCookie = new ConsentCookie('BOXhscYOXhscYACABDENAE4AAAAAwQgA');
+
+        $this->assertEquals(1, $consentCookie->getVersion(), 'A v1 consent string must still be accepted');
+    }
+
     public function test_decodeWebSafeString()
     {
         $consentCookie = new ConsentCookie('BOXHb99OXHb_BAOABBFRB2-AAAAid7_______9______9uz_Gv_v_f__33e8__9v_l_7_-___u_-33d4-_1vf99yfm1-7ftr3tp_86ues2_Xur_959__3z27EA');
