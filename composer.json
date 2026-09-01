@@ -1,8 +1,8 @@
 {
     "name": "mifefr/consent-string-sdk-php",
-    "description": "Transparency and Consent Framework: Consent String SDK (PHP)",
+    "description": "IAB Europe Transparency and Consent Framework (TCF) v2.3 and v1.1 consent string decoder and encoder for PHP",
     "type": "library",
-    "keywords": ["consent", "iab", "cookie", "library", "gpdr", "rgpd"],
+    "keywords": ["tcf", "tcf-v2", "tcstring", "iab", "iabtcf", "consent", "consent-string", "gdpr", "rgpd", "cmp", "cookie", "privacy"],
     "license": "MIT",
     "authors": [
         {

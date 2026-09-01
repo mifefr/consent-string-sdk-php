@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-09-01
+
+### Changed
+
+- Package keywords and description now name TCF and TC String. The package was
+  absent from a Packagist search for "tcf", the exact term of the domain, with
+  only eight competing packages, because the acronym appeared nowhere in its
+  metadata. The `gpdr` keyword was a typo for `gdpr`.
+
 ## [2.0.0] - 2026-09-01
 
 ### Added
@@ -52,5 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Last release of the TCF v1.1 only SDK.
 
+[2.0.1]: https://github.com/mifefr/consent-string-sdk-php/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/mifefr/consent-string-sdk-php/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/mifefr/consent-string-sdk-php/releases/tag/v1.1.1

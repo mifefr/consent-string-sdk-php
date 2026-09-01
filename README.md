@@ -1,6 +1,6 @@
 # Consent-String-SDK-PHP
 
-Transparency and Consent Framework: Consent String SDK (PHP)
+IAB Europe Transparency and Consent Framework (TCF) consent string decoder and encoder for PHP.
 
 Decodes and encodes IAB Europe TCF consent strings, in both formats currently
 in circulation:
