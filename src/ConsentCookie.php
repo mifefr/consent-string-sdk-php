@@ -11,6 +11,14 @@ class ConsentCookie extends ConsentCookieEntity
     const BINARY_MIN_LENGTH = 173;
 
     /**
+     * Consent string format handled by this SDK (TCF v1.1).
+     *
+     * TCF v2 strings share their first 132 bits with v1, so decoding one here
+     * would silently return wrong purposes and vendors instead of failing.
+     */
+    const SUPPORTED_VERSION = 1;
+
+    /**
      * Creates a ConsentCookie from a based64 string
      *
      * @param  string    $consent_cookie
@@ -19,6 +27,7 @@ class ConsentCookie extends ConsentCookieEntity
     {
         if (!empty($consent_cookie)) {
             $consent_cookie_binary = str2bin(base64_decode(decodeWebSafeString($consent_cookie)));
+            $this->checkSupportedVersion($consent_cookie_binary);
             $this->checkBinaryLength($consent_cookie_binary, self::BINARY_MIN_LENGTH);
             $this->hydrateFromCookieBinary($consent_cookie_binary);
             $encoding_type = (int)$this->encodingType;
@@ -149,6 +158,35 @@ class ConsentCookie extends ConsentCookieEntity
      * @param string  $binary
      * @param integer $binary_min_length
      */
+    /**
+     * Reject a consent string encoded in a format this SDK cannot decode
+     *
+     * @param  string $binary
+     * @throws \InvalidArgumentException
+     */
+    private function checkSupportedVersion($binary)
+    {
+        $version_length = self::BINARY_CONFIG['version']['length'];
+
+        if (strlen($binary) < $version_length) {
+            throw new \InvalidArgumentException(
+                'The consent string is too short to hold a version number. Binary : '
+                . var_export($binary, true)
+            );
+        }
+
+        $version = bindec(substr($binary, self::BINARY_CONFIG['version']['start'], $version_length));
+
+        if ($version !== self::SUPPORTED_VERSION) {
+            throw new \InvalidArgumentException(
+                "Unsupported consent string version $version. This SDK implements the TCF v1.1 "
+                . 'consent string (version ' . self::SUPPORTED_VERSION . ') only. TCF v2 strings share '
+                . 'their first 132 bits with v1, so decoding one here would silently return wrong '
+                . 'purposes and vendors.'
+            );
+        }
+    }
+
     private function checkBinaryLength($binary, $binary_min_length)
     {
         $binary_length = strlen($binary);
