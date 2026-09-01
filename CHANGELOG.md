@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its publisher restrictions are variable length.
 - CI job checking that the sources still parse on PHP 5.6, the version
   `composer.json` advertises.
+- Test vectors taken from the IAB reference implementations (iabtcf-java and
+  iabtcfv2), decoding two strings written by production CMPs in 2020, one of
+  them by Didomi with 236 consented vendors. Both re-encode bit for bit.
 - Vendor sections built from scratch pick whichever of the two encodings is
   shorter. Encoding four vendors including id 755 went from 900 characters to
   82. A section decoded from a string keeps the encoding it was read with, so

@@ -9,6 +9,10 @@ class TcStringTest extends TestCase
 {
     const REFERENCE = 'CQXEyXAQXEyXAAHABDENBkFqAOAAAAwAAAqIAFCEABSAFAAQABgAJgAjoAIACA';
 
+    const PRODUCTION_CMP_681 = 'COwxsONOwxsONKpAAAENAdCAAMAAAAAAAAAAAAAAAAAA';
+
+    const PRODUCTION_CMP_92 = 'COxR03kOxR1CqBcABCENAgCMAP_AAH_AAAqIF3EXySoGY2thI2YVFxBEIYwfJxyigMgChgQIsSwNQIeFLBoGLiAAHBGYJAQAGBAEEACBAQIkHGBMCQAAgAgBiRCMQEGMCzNIBIBAggEbY0FACCVmHkHSmZCY7064O__QLuIJEFQMAkSBAIACLECIQwAQDiAAAYAlAAABAhIaAAgIWBQEeAAAACAwAAgAAABBAAACAAQAAICIAAABAAAgAiAQAAAAGgIQAACBABACRIAAAEANCAAgiCEAQg4EAo4AAA';
+
     public function test_decodes_the_core_segment()
     {
         $tc = new TcString(self::REFERENCE);
@@ -247,5 +251,59 @@ class TcStringTest extends TestCase
             $back->getCreated()->format('Y-m-d H:i:s.u'),
             'Deciseconds should survive the round trip'
         );
+    }
+
+    public function test_decodes_a_production_string_from_a_minimal_cmp()
+    {
+        $tc = new TcString(self::PRODUCTION_CMP_681);
+
+        $this->assertEquals(2, $tc->getVersion());
+        $this->assertEquals(681, $tc->getCmpId());
+        $this->assertEquals(29, $tc->getVendorListVersion());
+        $this->assertEquals(2, $tc->getTcfPolicyVersion(), 'Policy version 2 was the one in force in 2020');
+        $this->assertEquals('EN', $tc->getConsentLanguage());
+        $this->assertEquals('2020-03-24', $tc->getCreated()->format('Y-m-d'));
+        $this->assertEquals([1, 2], $tc->getPurposesConsent());
+        $this->assertEmpty($tc->getVendorConsent()->getVendors());
+        $this->assertEquals(self::PRODUCTION_CMP_681, $tc->toBase64());
+    }
+
+    public function test_decodes_a_production_string_from_a_full_cmp()
+    {
+        $tc = new TcString(self::PRODUCTION_CMP_92);
+
+        $this->assertEquals(92, $tc->getCmpId());
+        $this->assertEquals(1, $tc->getCmpVersion());
+        $this->assertEquals(2, $tc->getConsentScreen());
+        $this->assertEquals(32, $tc->getVendorListVersion());
+        $this->assertEquals('FR', $tc->getPublisherCC());
+        $this->assertEquals('2020-04-03', $tc->getCreated()->format('Y-m-d'));
+        $this->assertNotEquals(
+            $tc->getCreated()->format('H:i:s'),
+            $tc->getLastUpdated()->format('H:i:s'),
+            'This string was updated after it was created'
+        );
+
+        $this->assertEquals([1, 2], $tc->getSpecialFeatureOptIns());
+        $this->assertEquals(range(1, 10), $tc->getPurposesConsent());
+        $this->assertEquals(range(2, 10), $tc->getPurposesLegitimateInterest());
+
+        $this->assertEquals(750, $tc->getVendorConsent()->getMaxVendorId());
+        $this->assertCount(236, $tc->getVendorConsent()->getVendors());
+        $this->assertCount(103, $tc->getVendorLegitimateInterest()->getVendors());
+        $this->assertTrue($tc->hasVendorConsent(755) === false, 'Vendor 755 is past maxVendorId');
+        $this->assertTrue($tc->hasVendorConsent(2));
+
+        $this->assertEquals(self::PRODUCTION_CMP_92, $tc->toBase64(), 'Round trip must stay bit exact');
+    }
+
+    public function test_production_strings_predate_the_mandatory_disclosed_vendors_segment()
+    {
+        foreach ([self::PRODUCTION_CMP_681, self::PRODUCTION_CMP_92] as $string) {
+            $tc = new TcString($string);
+
+            $this->assertFalse($tc->hasDisclosedVendorsSegment());
+            $this->assertNull($tc->isVendorDisclosed(2), 'Unknown, not "not disclosed"');
+        }
     }
 }
