@@ -43,3 +43,22 @@ jobs:
           files: clover.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
+
+  lint-legacy:
+    runs-on: ubuntu-latest
+    name: Syntax check PHP 5.6
+
+    # composer.json advertises php >=5.6.0 for consumers of the library.
+    # PHPUnit 9 needs PHP 7.3, so the suite cannot run there, but the sources
+    # must still parse on the oldest version the package claims to support.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '5.6'
+          coverage: none
+
+      - name: Lint sources
+        run: find src -name '*.php' -print0 | xargs -0 -n1 php -l
