@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2026-09-01
 
 ### Added
 
@@ -51,3 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.1] - 2018-12-14
 
 Last release of the TCF v1.1 only SDK.
+
+[2.0.0]: https://github.com/mifefr/consent-string-sdk-php/compare/v1.1.1...v2.0.0
+[1.1.1]: https://github.com/mifefr/consent-string-sdk-php/releases/tag/v1.1.1
